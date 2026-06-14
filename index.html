@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patitas al Rescate - Tecnología que salva vidas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,700;1,700&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="navbar">
+    <div class="logo" onclick="irAInicio()" style="cursor:pointer;">
+        <span class="logo-icon">🐾</span> Patitas al Rescate
+    </div>
+    <nav>
+        <ul class="menu">
+            <li><a href="#mapa-seccion" onclick="filtrarMapa('adopcion')">Adoptar</a></li>
+            <li><a href="#mapa-seccion" onclick="abrirModalReporte()">Reportar animal</a></li>
+            <li><a href="#mapa-seccion" onclick="mostrarTodosLosReportes()">Mapa de rescates</a></li>
+            <li><a href="#tarjeta-asistente">Tenencia responsable</a></li>
+        </ul>
+    </nav>
+    <div class="nav-buttons">
+        <button class="btn-login" onclick="abrirModalLogin()">Iniciar sesión</button>
+        <button class="btn-app-download" onclick="mostrarToast('🚀 ¡Próximamente! Estamos puliendo los últimos detalles para Android e iOS.')">📱 Descargar app</button>
+    </div>
+</header>
+
+<main>
+    <!-- HERO -->
+    <section id="inicio" class="hero">
+        <div class="badge-app">
+            <span class="dot-live"></span> Conectado en tiempo real con la app
+        </div>
+        <h1>Tecnología que<br><span class="text-gradient">salva vidas</span> animales</h1>
+        <p>Reporta animales en riesgo, encuentra mascotas en adopción y aprende a ser un tutor responsable. Todo en una plataforma.</p>
+        <div class="hero-actions">
+            <button class="btn-hero-primary" onclick="filtrarMapa('adopcion')">🤍 Ver adopciones</button>
+            <button class="btn-hero-secondary" onclick="abrirModalReporte()">⚠️ Reportar animal</button>
+        </div>
+        <div class="app-status">📱 App disponible próximamente</div>
+    </section>
+
+    <!-- ESTADÍSTICAS -->
+    <section class="estadisticas">
+        <div class="estadisticas-header">
+            <span class="sub-green">⚠️ LA REALIDAD EN CHILE - POR QUÉ EXISTIMOS</span>
+            <h2>Más de 4 millones de animales viven sin hogar en nuestro país</h2>
+        </div>
+        <div class="cards-stats">
+            <div class="card reveal-on-scroll"><h2 class="stat-number" data-target="4049277">0</h2><p>perros y gatos sin tutor en Chile</p></div>
+            <div class="card reveal-on-scroll"><h2 class="stat-number" data-target="3461104">0</h2><p>perros en la vía pública sin supervisión</p></div>
+            <div class="card reveal-on-scroll"><h2>1 de cada 4</h2><p>animales censados está abandonado</p></div>
+            <div class="card reveal-on-scroll"><h2>Solo 25%</h2><p>tiene chip, siendo obligatorio desde 2018</p></div>
+        </div>
+
+        <div class="quote-container">
+            <p>Por cada 2,4 perros con dueño hay uno en la calle. El abandono no es inevitable: la educación, la esterilización y la adopción responsable son las únicas soluciones reales. Patitas al Rescate nació para hacer eso posible.</p>
+            <span class="source">Fuente: Censo Nacional de Mascotas — UC + Subdere</span>
+        </div>
+    </section>
+
+    <!-- CARACTERÍSTICAS -->
+    <section class="caracteristicas">
+        <span class="sub-green">LA PLATAFORMA</span>
+        <h2>Todo lo que puedes hacer</h2>
+        <p class="sub-desc">Desde el sitio y desde la app — sincronizados en tiempo real</p>
+        <div class="grid-features">
+            <div class="feature-card" onclick="abrirModalReporte()" style="cursor:pointer;">
+                <div class="icon-feat red-i">⚠️</div>
+                <h3>Reportar Animales</h3>
+                <p>Fotografía, ubica y clasifica la urgencia. Los voluntarios cercanos reciben la alerta al instante.</p>
+                <span class="tag-feat red-t">Urgente / Atención / Estable</span>
+            </div>
+            <div class="feature-card" onclick="filtrarMapa('adopcion')" style="cursor:pointer;">
+                <div class="icon-feat green-i">🤍</div>
+                <h3>Adoptar Mascotas</h3>
+                <p>Perros, gatos, conejos, hámsters, aves y más. Filtra por especie, edad y comuna.</p>
+                <span class="tag-feat green-t">6 categorías disponibles</span>
+            </div>
+            <div class="feature-card" onclick="mostrarTodosLosReportes()" style="cursor:pointer;">
+                <div class="icon-feat blue-i">📍</div>
+                <h3>Mapa de Rescates</h3>
+                <p>Ve en tiempo real dónde hay animales en riesgo o en adopción cerca de tu ubicación.</p>
+                <span class="tag-feat blue-t">Geolocalización en vivo</span>
+            </div>
+            <div class="feature-card" onclick="mostrarToast('🏆 Al reportar o adoptar sumas puntos para convertirte en Héroe Animal. ¡Regístrate!')" style="cursor:pointer;">
+                <div class="icon-feat purple-i">👤</div>
+                <h3>Perfil Colaborador</h3>
+                <p>Acumula puntos por reportes y adopciones. Sube de Básico a Oro, Platino y Héroe Animal.</p>
+                <span class="tag-feat purple-t">Sistema de logros</span>
+            </div>
+            <div class="feature-card" style="border:2px solid var(--brand-green);background:#f0f8f2;cursor:pointer;" id="tarjeta-asistente" onclick="toggleChat()">
+                <div class="icon-feat teal-i">🤖</div>
+                <h3>Asistente Patitas</h3>
+                <p>IA especializada en cuidado animal. Resuelve dudas sobre rescate, salud y alimentación.</p>
+                <span class="tag-feat teal-t">Disponible 24/7 (Pruébame abajo ↓)</span>
+            </div>
+            <div class="feature-card" onclick="abrirGuiaTenencia()" style="cursor:pointer;">
+                <div class="icon-feat orange-i">📖</div>
+                <h3>Tenencia Responsable</h3>
+                <p>Guías de vacunas, alimentación, esterilización, trámites legales y bienestar animal.</p>
+                <span class="tag-feat orange-t">Ley Cholito incluida</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAPA INTERACTIVO -->
+    <section id="mapa-seccion" class="mapa-section-live">
+        <div class="mapa-header-title">
+            <span class="sub-green">FEED INTERACTIVO EN VIVO</span>
+            <h2>Actividad reciente de la comunidad</h2>
+            <p>Haz clic en los elementos del feed lateral para localizarlos en el mapa interactivo.</p>
+            <div class="mapa-filtros">
+                <button class="btn-filtro active" id="btn-filtro-todos"    onclick="filtrarMapa('todos')">Ver Todo</button>
+                <button class="btn-filtro"         id="btn-filtro-urgente" onclick="filtrarMapa('Urgente')">🔴 Urgentes</button>
+                <button class="btn-filtro"         id="btn-filtro-atencion" onclick="filtrarMapa('Atención')">🟡 En Atención</button>
+                <button class="btn-filtro"         id="btn-filtro-adopcion" onclick="filtrarMapa('adopcion')">🟢 En Adopción</button>
+                <button class="btn-filtro btn-filtro-refugio" id="btn-filtro-refugio"    onclick="filtrarLugares('refugio')">🏠 Refugios</button>
+                <button class="btn-filtro btn-filtro-vet"     id="btn-filtro-vet"        onclick="filtrarLugares('veterinaria')">🏥 Veterinarias</button>
+            </div>
+        </div>
+
+        <div class="filtros-avanzados">
+            <div class="filtros-avanzados-header">
+                <h4>🔍 Filtros avanzados</h4>
+                <button class="btn-limpiar" id="btn-limpiar-todo" onclick="limpiarFiltros()">Limpiar todo</button>
+            </div>
+
+            <div class="filtro-grupo">
+                <div class="filtro-grupo-label">Buscar</div>
+                <div class="search-input-wrap" id="search-wrap">
+                    <span>🔎</span>
+                    <input type="text" id="filtro-busqueda" placeholder="Nombre, comuna, descripción..." oninput="aplicarFiltros()">
+                    <button class="btn-clear-search" onclick="limpiarBusqueda()" title="Limpiar búsqueda">✕</button>
+                </div>
+            </div>
+
+            <div class="filtro-grupo">
+                <div class="filtro-grupo-label">Estado</div>
+                <div class="chips-row" id="chips-estado">
+                    <div class="filter-chip on-green" data-val="todos" onclick="selChip(this,'estado')">Todo</div>
+                    <div class="filter-chip" data-val="Urgente"  onclick="selChip(this,'estado')">🔴 Urgente</div>
+                    <div class="filter-chip" data-val="Atención" onclick="selChip(this,'estado')">🟡 Atención</div>
+                    <div class="filter-chip" data-val="adopcion" onclick="selChip(this,'estado')">🟢 Adopción</div>
+                </div>
+            </div>
+
+            <div class="filtro-grupo">
+                <div class="filtro-grupo-label">Tipo de lugar</div>
+                <div class="chips-row" id="chips-tipo">
+                    <div class="filter-chip on-green" data-val="reportes" onclick="selChip(this,'tipo')">🐾 Reportes</div>
+                    <div class="filter-chip" data-val="refugio"     onclick="selChip(this,'tipo')">🏠 Refugios</div>
+                    <div class="filter-chip" data-val="veterinaria" onclick="selChip(this,'tipo')">🏥 Veterinarias</div>
+                </div>
+            </div>
+
+            <div class="filtro-grupo">
+                <div class="filtro-grupo-label">Ordenar por</div>
+                <div class="sort-row" id="sort-row">
+                    <div class="sort-btn sel" data-val="reciente" onclick="selSort(this)">Más reciente</div>
+                    <div class="sort-btn" data-val="urgente"  onclick="selSort(this)">Más urgente</div>
+                </div>
+            </div>
+
+            <div class="resultados-bar" id="resultados-bar">
+                Mostrando <span class="resultados-count" id="resultados-count">0</span> resultados
+            </div>
+        </div>
+
+        <div class="mapa-layout-split">
+            <div id="mapa-interactivo"></div>
+            <div class="feed-lateral">
+                <h3 id="feed-titulo">Reportes Activos (<span id="contador-rescates">0</span>)</h3>
+                <div id="rescates-container"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- DONACIONES -->
+    <section class="donaciones-section">
+        <div class="donaciones-header">
+            <span class="sub-green">TU AYUDA SALVA VIDAS</span>
+            <h2>Apoya nuestro impacto local</h2>
+            <p>Cada donación se destina directamente a rescatistas independientes y clínicas veterinarias asociadas.</p>
+        </div>
+        <div class="grid-donaciones">
+            <div class="donacion-card">
+                <div class="donacion-icon">🩹</div>
+                <h3>Kit de Primeros Auxilios</h3>
+                <p>Aporta insumos médicos básicos, gasas y antisépticos para un rescate en ruta.</p>
+                <button class="btn-donar" onclick="mostrarToast('💳 Conectando con pasarela de pago para $5.000 CLP...')">$5.000 CLP</button>
+            </div>
+            <div class="donacion-card destacado">
+                <div class="donacion-icon">🍲</div>
+                <h3>Alimento por un Mes</h3>
+                <p>Asegura la nutrición completa de un perrito o gatito rescatado en su hogar temporal.</p>
+                <button class="btn-donar primary" onclick="mostrarToast('💳 Conectando con pasarela de pago para $15.000 CLP...')">$15.000 CLP</button>
+            </div>
+            <div class="donacion-card">
+                <div class="donacion-icon">🩺</div>
+                <h3>Consulta Veterinaria</h3>
+                <p>Financia una atención profesional, vacunas obligatorias o desparasitación.</p>
+                <button class="btn-donar" onclick="mostrarToast('💳 Conectando con pasarela de pago para $25.000 CLP...')">$25.000 CLP</button>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- MODAL: LOGIN / REGISTRO -->
+<div class="modal-overlay" id="modal-login">
+    <div class="modal-card">
+        <button class="modal-close" onclick="cerrarModales()">✕</button>
+        <div id="login-section">
+            <h3>Iniciar Sesión</h3>
+            <p class="modal-subtitle">Ingresa a la red de salvamento de Patitas</p>
+            <form onsubmit="manejarLogin(event)">
+                <div class="input-group"><label>Correo Electrónico</label><input type="email" required placeholder="ejemplo@correo.com"></div>
+                <div class="input-group"><label>Contraseña</label><input type="password" required placeholder="••••••••"></div>
+                <button type="submit" class="btn-modal-submit">Ingresar</button>
+            </form>
+            <p class="modal-foot-text">¿No tienes cuenta? <span onclick="cambiarVistaModal('registro')">Regístrate aquí</span></p>
+        </div>
+        <div id="registro-section" style="display:none;">
+            <h3>Crear Cuenta</h3>
+            <p class="modal-subtitle">Únete como voluntario o tutor responsable</p>
+            <form onsubmit="manejarRegistro(event)">
+                <div class="input-group"><label>Nombre Completo</label><input type="text" required placeholder="Juan Pérez"></div>
+                <div class="input-group"><label>Correo Electrónico</label><input type="email" required placeholder="juan@correo.com"></div>
+                <div class="input-group"><label>Contraseña</label><input type="password" required placeholder="Mínimo 6 caracteres"></div>
+                <button type="submit" class="btn-modal-submit">Registrarme</button>
+            </form>
+            <p class="modal-foot-text">¿Ya tienes cuenta? <span onclick="cambiarVistaModal('login')">Inicia sesión</span></p>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: REPORTE -->
+<div class="modal-overlay" id="modal-reporte">
+    <div class="modal-card">
+        <button class="modal-close" onclick="cerrarModales()">✕</button>
+        <h3>Reportar un Animal</h3>
+        <p class="modal-subtitle">Añade un caso directamente al mapa comunitario</p>
+        <form onsubmit="crearNuevoReporte(event)">
+            <div class="input-group"><label>Título del Reporte / Mascota</label><input type="text" id="rep-titulo" required placeholder="Ej: Perrito herido, Gatito busca hogar..."></div>
+            <div class="input-group">
+                <label>Tipo de Estado</label>
+                <select id="rep-estado">
+                    <option value="Urgente">🔴 Urgente (Requiere rescate médico inmediato)</option>
+                    <option value="Atención">🟡 Atención (Estable pero abandonado/en calle)</option>
+                    <option value="adopcion">🟢 En Adopción (Buscando una familia)</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Comuna de Santiago</label>
+                <select id="rep-comuna">
+                    <optgroup label="Zona Centro">
+                        <option>Santiago Centro</option>
+                        <option>Providencia</option>
+                        <option>Ñuñoa</option>
+                        <option>Recoleta</option>
+                        <option>Independencia</option>
+                        <option>Estación Central</option>
+                    </optgroup>
+                    <optgroup label="Zona Oriente">
+                        <option>Las Condes</option>
+                        <option>Vitacura</option>
+                        <option>Lo Barnechea</option>
+                        <option>La Reina</option>
+                        <option>Peñalolén</option>
+                        <option>Macul</option>
+                    </optgroup>
+                    <optgroup label="Zona Sur">
+                        <option>La Florida</option>
+                        <option>San Bernardo</option>
+                        <option>La Pintana</option>
+                        <option>San Miguel</option>
+                        <option>El Bosque</option>
+                        <option>La Cisterna</option>
+                        <option>San Ramón</option>
+                    </optgroup>
+                    <optgroup label="Zona Poniente">
+                        <option>Maipú</option>
+                        <option>Pudahuel</option>
+                        <option>Cerrillos</option>
+                        <option>Cerro Navia</option>
+                        <option>Lo Espejo</option>
+                        <option>Renca</option>
+                        <option>Quilicura</option>
+                    </optgroup>
+                    <optgroup label="Zona Norte">
+                        <option>Huechuraba</option>
+                        <option>Conchalí</option>
+                        <option>Colina</option>
+                        <option>Lampa</option>
+                    </optgroup>
+                </select>
+            </div>
+            <div class="input-group"><label>Descripción corta</label><input type="text" id="rep-desc" required placeholder="Ej: Visto en plaza de armas, es asustadizo."></div>
+            <button type="submit" class="btn-modal-submit">Publicar Reporte</button>
+        </form>
+    </div>
+</div>
+
+<!-- CHATBOT FLOTANTE -->
+<div class="chatbot-widget" id="chatbot-widget">
+    <button class="chatbot-trigger" id="chatbot-trigger" onclick="toggleChat()">
+        <span class="chat-icon-open">🤖</span>
+        <span class="chat-icon-close">✕</span>
+    </button>
+    <div class="chatbot-window" id="chatbot-window">
+        <div class="chatbot-header">
+            <div class="chatbot-avatar">🤖</div>
+            <div class="chatbot-info">
+                <h4>Asistente Patitas</h4>
+                <p class="status-online"><span class="dot-online"></span> Especialista Activo</p>
+            </div>
+        </div>
+        <div class="chatbot-body" id="chatbot-messages"></div>
+        <div class="chatbot-footer">
+            <input type="text" id="chatbot-input" placeholder="Pregúntame sobre refugios, vacunas..." onkeypress="evaluarEnter(event)">
+            <button onclick="enviarMensajeUsuario()">🚀</button>
+        </div>
+    </div>
+</div>
+
+<footer class="footer-dark">
+    <div class="footer-content">
+        <div class="footer-logo">🐾 Patitas al Rescate · Chile</div>
+    </div>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="script.js"></script>
+</body>
+</html>

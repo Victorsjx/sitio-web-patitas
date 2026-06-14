@@ -656,7 +656,12 @@ renderizarPlataforma();
 // =========================================================================
 function abrirModalLogin()   { document.getElementById("modal-login").classList.add("open"); cambiarVistaModal('login'); }
 function abrirModalReporte() {
-    if (!usuarioActual) {
+    if (!firebaseActivo) {
+        document.getElementById("modal-reporte").classList.add("open");
+        return;
+    }
+    const user = firebase.auth().currentUser;
+    if (!user) {
         mostrarToast("🔐 Inicia sesión para reportar un animal.");
         abrirModalLogin();
         return;

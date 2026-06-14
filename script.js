@@ -708,6 +708,7 @@ async function manejarRegistroFirebase(e) {
         await auth.signInWithEmailAndPassword(email, password);
         mostrarToast("Sesion iniciada correctamente.");
         cerrarModales();
+        actualizarBotonSesion();
     } catch (error) {
         console.error("[Auth] Error iniciando sesion:", error);
         mostrarToast("No pude iniciar sesion. Revisa correo y contrasena.");

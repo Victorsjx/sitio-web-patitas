@@ -401,7 +401,7 @@ function _renderizar() {
 
         const esAdopcion = r.estado === "adopcion";
         htmlFeed += `
-            <div class="item-feed${esAdopcion ? ' adopcion-card' : ''}" onclick="abrirFichaReporte('${r.id}')">
+<div class="item-feed${esAdopcion ? ' adopcion-card' : ''}" onclick="event.preventDefault();abrirFichaReporte('${r.id}')">
                 <div class="item-feed-header">
                     <h4>${r.titulo}</h4>
                     <span class="tag-feat ${tagClass}">${textoEstado}</span>
@@ -652,6 +652,8 @@ function enfocarMarcador(lat, lng) { mapa.setView([lat, lng], 14, { animate:true
 let fichaMapa = null;
 
 function abrirFichaReporte(id) {
+    event.preventDefault();
+    event.stopPropagation();
     const r = reportesRealTime.find(rep => rep.id == id);
     if (!r) return;
 

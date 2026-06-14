@@ -170,7 +170,7 @@ let db             = null;
 let usuarioActual  = null;
 let firebaseActivo = false;
 
-console.log("[Patitas al Rescate] v2 — animaciones + filtros avanzados cargados.");
+console.log("[Patitas al Rescate] v3 — chatbot activo.");
 
 // =========================================================================
 // 2.1 FIREBASE: AUTH + FIRESTORE

@@ -1,7 +1,7 @@
 // =========================================================================
 // 1. BASE DE DATOS LOCAL
 // =========================================================================
-const reportesRealTime = [
+let reportesRealTime = [
     // URGENTES
     { id:1,  titulo:"Gatito atrapado en árbol", estado:"Urgente", comuna:"Providencia", descripcion:"Gato joven no puede bajar desde hace 24 horas. Esquina Condell con Marín, frente a la plaza.", coords:[-33.4442,-70.6285], fecha:"Hace 10 min", ts: Date.now()-10*60*1000 },
     { id:2,  titulo:"Perrita atropellada Alameda", estado:"Urgente", comuna:"Santiago Centro", descripcion:"Perrita mediana atropellada frente al Metro Baquedano. Está consciente pero no puede moverse. Necesita traslado urgente.", coords:[-33.4380,-70.6350], fecha:"Hace 3 min", ts: Date.now()-3*60*1000 },
@@ -164,8 +164,121 @@ let filtroEstado   = 'todos';
 let filtroTipo     = 'reportes';
 let filtroSort     = 'reciente';
 let filtroBusqueda = '';
+let firebaseApp    = null;
+let auth           = null;
+let db             = null;
+let usuarioActual  = null;
+let firebaseActivo = false;
 
 console.log("[Patitas al Rescate] v2 — animaciones + filtros avanzados cargados.");
+
+// =========================================================================
+// 2.1 FIREBASE: AUTH + FIRESTORE
+// =========================================================================
+function tieneConfigFirebaseReal() {
+    return !!(
+        window.firebase &&
+        window.firebaseConfig &&
+        window.firebaseConfig.apiKey &&
+        !window.firebaseConfig.apiKey.includes("PEGA_AQUI") &&
+        window.firebaseConfig.projectId &&
+        !window.firebaseConfig.projectId.includes("TU_PROYECTO")
+    );
+}
+
+function inicializarFirebasePatitas() {
+    if (!tieneConfigFirebaseReal()) {
+        console.warn("[Firebase] Agrega tus datos reales en firebase-config.js para activar Auth y Firestore.");
+        return;
+    }
+
+    try {
+        firebaseApp = firebase.apps.length ? firebase.app() : firebase.initializeApp(window.firebaseConfig);
+        auth = firebase.auth();
+        db = firebase.firestore();
+        firebaseActivo = true;
+
+        auth.onAuthStateChanged((user) => {
+            usuarioActual = user;
+            actualizarBotonSesion();
+        });
+
+        escucharReportesFirestore();
+        console.log("[Firebase] Conectado correctamente.");
+    } catch (error) {
+        console.error("[Firebase] No se pudo inicializar:", error);
+        mostrarToast("Firebase no pudo iniciar. Revisa firebase-config.js.");
+    }
+}
+
+function actualizarBotonSesion() {
+    const btn = document.querySelector(".btn-login");
+    if (!btn) return;
+    btn.innerText = usuarioActual ? "Mi Perfil" : "Iniciar sesion";
+}
+
+function normalizarReporteFirestore(doc) {
+    const data = doc.data();
+    const createdAt = data.createdAt && data.createdAt.toMillis ? data.createdAt.toMillis() : Date.now();
+
+    return {
+        id: doc.id,
+        titulo: data.titulo || "Reporte sin titulo",
+        estado: data.estado || "Atencion",
+        comuna: data.comuna || "Sin comuna",
+        descripcion: data.descripcion || "",
+        coords: Array.isArray(data.coords) ? data.coords : [-33.4560, -70.6300],
+        fecha: formatearFechaRelativa(createdAt),
+        ts: createdAt,
+        uid: data.uid || null
+    };
+}
+
+function formatearFechaRelativa(timestamp) {
+    const diff = Date.now() - timestamp;
+    const minutos = Math.max(0, Math.floor(diff / 60000));
+    if (minutos < 1) return "Ahora mismo";
+    if (minutos < 60) return `Hace ${minutos} min`;
+    const horas = Math.floor(minutos / 60);
+    if (horas < 24) return `Hace ${horas} hora${horas === 1 ? "" : "s"}`;
+    const dias = Math.floor(horas / 24);
+    return `Hace ${dias} dia${dias === 1 ? "" : "s"}`;
+}
+
+function escucharReportesFirestore() {
+    if (!firebaseActivo || !db) return;
+
+    db.collection("reportes")
+        .orderBy("createdAt", "desc")
+        .limit(80)
+        .onSnapshot((snapshot) => {
+            const reportesNube = snapshot.docs.map(normalizarReporteFirestore);
+            if (reportesNube.length > 0) {
+                reportesRealTime = reportesNube;
+                if (vistaActual === "reportes") renderizarPlataforma();
+            }
+        }, (error) => {
+            console.error("[Firestore] Error leyendo reportes:", error);
+            mostrarToast("No pude cargar reportes de Firestore. Usando datos de ejemplo.");
+        });
+}
+
+async function crearReporteFirestore(reporte) {
+    if (!firebaseActivo || !db || !usuarioActual) return false;
+
+    await db.collection("reportes").add({
+        uid: usuarioActual.uid,
+        titulo: reporte.titulo,
+        estado: reporte.estado,
+        comuna: reporte.comuna,
+        descripcion: reporte.descripcion,
+        coords: reporte.coords,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    return true;
+}
 
 // =========================================================================
 // 3. MAPA
@@ -529,6 +642,7 @@ function filtrarLugares(tipo) {
 function mostrarTodosLosReportes() { filtrarMapa('todos'); }
 function enfocarMarcador(lat, lng) { mapa.setView([lat, lng], 14, { animate:true, duration:1 }); }
 
+inicializarFirebasePatitas();
 renderizarPlataforma();
 
 // =========================================================================
@@ -572,6 +686,90 @@ function crearNuevoReporte(e) {
     mostrarToast("📍 ¡Reporte publicado en el mapa!");
     window.location.hash = "mapa-seccion";
     enfocarMarcador(lat, lng);
+}
+
+async function manejarLoginFirebase(e) {
+    e.preventDefault();
+    const email = e.target.querySelector('input[type="email"]').value.trim();
+    const password = e.target.querySelector('input[type="password"]').value;
+
+    if (!firebaseActivo || !auth) {
+        mostrarToast("Configura Firebase para activar el inicio de sesion real.");
+        return;
+    }
+
+    try {
+        await auth.signInWithEmailAndPassword(email, password);
+        mostrarToast("Sesion iniciada correctamente.");
+        cerrarModales();
+    } catch (error) {
+        console.error("[Auth] Error iniciando sesion:", error);
+        mostrarToast("No pude iniciar sesion. Revisa correo y contrasena.");
+    }
+}
+
+async function manejarRegistroFirebase(e) {
+    e.preventDefault();
+    const email = e.target.querySelector('input[type="email"]').value.trim();
+    const password = e.target.querySelector('input[type="password"]').value;
+
+    if (!firebaseActivo || !auth) {
+        mostrarToast("Configura Firebase para activar el registro real.");
+        return;
+    }
+
+    try {
+        await auth.createUserWithEmailAndPassword(email, password);
+        mostrarToast("Cuenta creada. Bienvenido a Patitas al Rescate.");
+        cerrarModales();
+    } catch (error) {
+        console.error("[Auth] Error registrando usuario:", error);
+        mostrarToast("No pude crear la cuenta. Usa una contrasena de al menos 6 caracteres.");
+    }
+}
+
+async function crearNuevoReporteFirebase(e) {
+    e.preventDefault();
+    const titulo = document.getElementById("rep-titulo").value.trim();
+    const estado = document.getElementById("rep-estado").value;
+    const comuna = document.getElementById("rep-comuna").value;
+    const desc   = document.getElementById("rep-desc").value.trim();
+    const lat    = -33.4560 + (Math.random()-0.5)*0.1;
+    const lng    = -70.6300 + (Math.random()-0.5)*0.1;
+    const nuevoReporte = {
+        id: reportesRealTime.length + 1,
+        titulo,
+        estado,
+        comuna,
+        descripcion: desc,
+        coords: [lat, lng],
+        fecha: "Ahora mismo",
+        ts: Date.now()
+    };
+
+    if (firebaseActivo && !usuarioActual) {
+        mostrarToast("Inicia sesion para publicar un reporte.");
+        abrirModalLogin();
+        return;
+    }
+
+    try {
+        const guardadoEnFirebase = await crearReporteFirestore(nuevoReporte);
+        if (!guardadoEnFirebase) {
+            reportesRealTime.unshift(nuevoReporte);
+        }
+    } catch (error) {
+        console.error("[Firestore] Error creando reporte:", error);
+        mostrarToast("No pude guardar en Firebase. Revisa las reglas de Firestore.");
+        return;
+    }
+
+    cerrarModales();
+    limpiarFiltros();
+    mostrarToast(firebaseActivo ? "Reporte publicado en Firestore." : "Reporte publicado en modo de prueba.");
+    window.location.hash = "mapa-seccion";
+    enfocarMarcador(lat, lng);
+    e.target.reset();
 }
 
 function irAInicio() { window.scrollTo({ top:0, behavior:'smooth' }); }

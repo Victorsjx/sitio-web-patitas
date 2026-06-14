@@ -1,0 +1,52 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner() {
+      return signedIn() && resource.data.uid == request.auth.uid;
+    }
+
+    function validReport() {
+      return request.resource.data.keys().hasOnly([
+        'uid',
+        'titulo',
+        'estado',
+        'comuna',
+        'descripcion',
+        'coords',
+        'createdAt',
+        'updatedAt'
+      ])
+      && request.resource.data.uid == request.auth.uid
+      && request.resource.data.titulo is string
+      && request.resource.data.titulo.size() >= 4
+      && request.resource.data.titulo.size() <= 80
+      && request.resource.data.estado in ['Urgente', 'Atencion', 'Atención', 'adopcion']
+      && request.resource.data.comuna is string
+      && request.resource.data.comuna.size() >= 3
+      && request.resource.data.comuna.size() <= 60
+      && request.resource.data.descripcion is string
+      && request.resource.data.descripcion.size() >= 8
+      && request.resource.data.descripcion.size() <= 500
+      && request.resource.data.coords is list
+      && request.resource.data.coords.size() == 2
+      && request.resource.data.coords[0] is number
+      && request.resource.data.coords[1] is number;
+    }
+
+    match /reportes/{reporteId} {
+      allow read: if true;
+      allow create: if signedIn() && validReport();
+      allow update: if isOwner() && validReport();
+      allow delete: if isOwner();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

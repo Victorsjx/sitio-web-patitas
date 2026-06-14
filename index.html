@@ -218,7 +218,7 @@
         <div id="login-section">
             <h3>Iniciar Sesión</h3>
             <p class="modal-subtitle">Ingresa a la red de salvamento de Patitas</p>
-            <form onsubmit="manejarLogin(event)">
+            <form onsubmit="manejarLoginFirebase(event)">
                 <div class="input-group"><label>Correo Electrónico</label><input type="email" required placeholder="ejemplo@correo.com"></div>
                 <div class="input-group"><label>Contraseña</label><input type="password" required placeholder="••••••••"></div>
                 <button type="submit" class="btn-modal-submit">Ingresar</button>
@@ -228,7 +228,7 @@
         <div id="registro-section" style="display:none;">
             <h3>Crear Cuenta</h3>
             <p class="modal-subtitle">Únete como voluntario o tutor responsable</p>
-            <form onsubmit="manejarRegistro(event)">
+            <form onsubmit="manejarRegistroFirebase(event)">
                 <div class="input-group"><label>Nombre Completo</label><input type="text" required placeholder="Juan Pérez"></div>
                 <div class="input-group"><label>Correo Electrónico</label><input type="email" required placeholder="juan@correo.com"></div>
                 <div class="input-group"><label>Contraseña</label><input type="password" required placeholder="Mínimo 6 caracteres"></div>
@@ -245,7 +245,7 @@
         <button class="modal-close" onclick="cerrarModales()">✕</button>
         <h3>Reportar un Animal</h3>
         <p class="modal-subtitle">Añade un caso directamente al mapa comunitario</p>
-        <form onsubmit="crearNuevoReporte(event)">
+        <form onsubmit="crearNuevoReporteFirebase(event)">
             <div class="input-group"><label>Título del Reporte / Mascota</label><input type="text" id="rep-titulo" required placeholder="Ej: Perrito herido, Gatito busca hogar..."></div>
             <div class="input-group">
                 <label>Tipo de Estado</label>
@@ -335,6 +335,10 @@
 </footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
 <script src="script.js"></script>
 </body>
 </html>

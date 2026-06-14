@@ -932,19 +932,12 @@ let chatDarkMode = false;
 let chatHistorial = [];
 
 function toggleChat() {
-    const window_ = document.getElementById("chatbot-window");
-    const iconOpen = document.querySelector(".chat-icon-open");
-    const iconClose = document.querySelector(".chat-icon-close");
-    const isOpen = window_.style.display === "flex";
+    const widget = document.getElementById("chatbot-widget");
+    const isOpen = widget.classList.contains("open");
     if (isOpen) {
-        window_.style.display = "none";
-        iconOpen.style.display = "block";
-        iconClose.style.display = "none";
+        widget.classList.remove("open");
     } else {
-        window_.style.display = "flex";
-        window_.style.flexDirection = "column";
-        iconOpen.style.display = "none";
-        iconClose.style.display = "block";
+        widget.classList.add("open");
         if (document.getElementById("chatbot-messages").children.length === 0) {
             reiniciarChat();
         }

@@ -977,6 +977,12 @@ function toggleMenu() {
     btn.classList.toggle('open');
 }
 
+document.querySelectorAll('.menu a').forEach(link => {
+    link.addEventListener('click', () => {
+        document.querySelector('.menu').classList.remove('open');
+        document.getElementById('btn-hamburguesa').classList.remove('open');
+    });
+});
 // Cerrar menú al hacer clic en un enlace
 document.querySelectorAll('.menu a').forEach(link => {
     link.addEventListener('click', () => {
@@ -985,13 +991,14 @@ document.querySelectorAll('.menu a').forEach(link => {
     });
 });
 function manejarClickLogin() {
+    document.querySelector('.menu').classList.remove('open');
+    document.getElementById('btn-hamburguesa').classList.remove('open');
     if (usuarioActual) {
         abrirModalPerfil();
     } else {
         abrirModalLogin();
     }
 }
-
 function abrirModalPerfil() {
     const nombre = usuarioActual.displayName || usuarioActual.email.split("@")[0];
     const correo = usuarioActual.email;

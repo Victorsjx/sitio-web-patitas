@@ -1497,3 +1497,34 @@ body {
     color: white;
     border-color: #dc2626;
 }
+/* ==========================================
+   FICHA REPORTE
+   ========================================== */
+.ficha-info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+    background: var(--bg-warm);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+}
+.ficha-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.ficha-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.ficha-row span:last-child {
+    font-size: 14px;
+    color: var(--text-primary);
+    font-weight: 500;
+    line-height: 1.5;
+}

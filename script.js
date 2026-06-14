@@ -401,7 +401,7 @@ function _renderizar() {
 
         const esAdopcion = r.estado === "adopcion";
         htmlFeed += `
-            <div class="item-feed${esAdopcion ? ' adopcion-card' : ''}" onclick="enfocarMarcador(${r.coords[0]},${r.coords[1]})">
+            <div class="item-feed${esAdopcion ? ' adopcion-card' : ''}" onclick="abrirFichaReporte('${r.id}')">
                 <div class="item-feed-header">
                     <h4>${r.titulo}</h4>
                     <span class="tag-feat ${tagClass}">${textoEstado}</span>
@@ -648,6 +648,40 @@ function filtrarLugares(tipo) {
 
 function mostrarTodosLosReportes() { filtrarMapa('todos'); }
 function enfocarMarcador(lat, lng) { mapa.setView([lat, lng], 14, { animate:true, duration:1 }); }
+
+let fichaMapa = null;
+
+function abrirFichaReporte(id) {
+    const r = reportesRealTime.find(rep => rep.id == id);
+    if (!r) return;
+
+    const colores = { "Urgente":"red-t", "Atención":"orange-t", "adopcion":"green-t" };
+    const textos  = { "Urgente":"🔴 Urgente", "Atención":"🟡 Atención", "adopcion":"🟢 Adopción" };
+
+    document.getElementById("ficha-titulo").innerText = r.titulo;
+    document.getElementById("ficha-comuna").innerText = "📍 " + r.comuna;
+    document.getElementById("ficha-descripcion").innerText = r.descripcion;
+    document.getElementById("ficha-fecha").innerText = r.fecha;
+    document.getElementById("ficha-estado-badge").innerHTML = `<span class="tag-feat ${colores[r.estado] || 'green-t'}">${textos[r.estado] || '🟢 Adopción'}</span>`;
+
+    // Acciones
+    const u = usuarioActual || firebase.auth().currentUser;
+    const acciones = document.getElementById("ficha-acciones");
+    acciones.innerHTML = `<button class="btn-hero-primary" style="flex:1;padding:10px;" onclick="enfocarMarcador(${r.coords[0]},${r.coords[1]});cerrarModales();">📍 Ver en mapa</button>`;
+    if (u && r.uid === u.uid) {
+        acciones.innerHTML += `<button class="btn-cerrar-sesion" style="flex:1;" onclick="eliminarReporte('${r.id}');cerrarModales();">🗑️ Eliminar</button>`;
+    }
+
+    document.getElementById("modal-ficha").classList.add("open");
+
+    // Mini mapa
+    setTimeout(() => {
+        if (fichaMapa) { fichaMapa.remove(); fichaMapa = null; }
+        fichaMapa = L.map('ficha-mini-mapa').setView(r.coords, 14);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(fichaMapa);
+        L.marker(r.coords, { icon: obtenerIconoPorEstado(r.estado) }).addTo(fichaMapa);
+    }, 100);
+}
 
 inicializarFirebasePatitas();
 renderizarPlataforma();

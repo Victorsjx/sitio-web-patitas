@@ -252,6 +252,27 @@
         <button class="btn-cerrar-sesion" onclick="cerrarSesion()">🚪 Cerrar sesión</button>
     </div>
 </div>
+<!-- MODAL: FICHA REPORTE -->
+<div class="modal-overlay" id="modal-ficha">
+    <div class="modal-card">
+        <button class="modal-close" onclick="cerrarModales()">✕</button>
+        <div id="ficha-estado-badge"></div>
+        <h3 id="ficha-titulo" style="margin-top:12px;"></h3>
+        <p class="modal-subtitle" id="ficha-comuna"></p>
+        <div class="ficha-info">
+            <div class="ficha-row">
+                <span class="ficha-label">📝 Descripción</span>
+                <span id="ficha-descripcion"></span>
+            </div>
+            <div class="ficha-row">
+                <span class="ficha-label">🕐 Publicado</span>
+                <span id="ficha-fecha"></span>
+            </div>
+        </div>
+        <div id="ficha-mini-mapa" style="height:180px;border-radius:12px;overflow:hidden;margin-top:16px;border:1.5px solid var(--border);"></div>
+        <div id="ficha-acciones" style="margin-top:16px;display:flex;gap:8px;"></div>
+    </div>
+</div>
 <!-- MODAL: LOGIN / REGISTRO -->
 <div class="modal-overlay" id="modal-login">
     <div class="modal-card">

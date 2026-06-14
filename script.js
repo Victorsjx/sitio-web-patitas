@@ -199,9 +199,10 @@ function inicializarFirebasePatitas() {
         firebaseActivo = true;
 
         auth.onAuthStateChanged((user) => {
-            usuarioActual = user;
-            actualizarBotonSesion();
-        });
+    usuarioActual = user;
+    console.log("[Auth] Usuario:", user ? user.email : "no logueado");
+    actualizarBotonSesion();
+});
 
         escucharReportesFirestore();
         console.log("[Firebase] Conectado correctamente.");

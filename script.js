@@ -1119,3 +1119,48 @@ async function eliminarReporte(id) {
         mostrarToast("No se pudo eliminar el reporte.");
     }
 }
+// =========================================================================
+// LOGO ANIMADO
+// =========================================================================
+const _logoMascotas = [
+  {e:'🐶',bg:'radial-gradient(circle at 38% 35%,#e8c080,#c08030 60%,#6b4010)'},
+  {e:'🐕',bg:'radial-gradient(circle at 38% 35%,#d0b898,#907050 60%,#503020)'},
+  {e:'🦮',bg:'radial-gradient(circle at 38% 35%,#f0d090,#d0a030 60%,#806010)'},
+  {e:'🐩',bg:'radial-gradient(circle at 38% 35%,#f0e8e0,#c0b0a0 60%,#706050)'},
+  {e:'🐕‍🦺',bg:'radial-gradient(circle at 38% 35%,#f8f8f8,#d0d0d0 60%,#606060)'},
+  {e:'🐱',bg:'radial-gradient(circle at 38% 35%,#e0e8f0,#a0b0c0 60%,#405060)'},
+  {e:'🐈',bg:'radial-gradient(circle at 38% 35%,#f0e8d8,#c0a878 60%,#806040)'},
+  {e:'🐈‍⬛',bg:'radial-gradient(circle at 38% 35%,#505868,#202530 60%,#101218)'},
+  {e:'😸',bg:'radial-gradient(circle at 38% 35%,#d8b870,#a07828 60%,#604010)'},
+  {e:'😻',bg:'radial-gradient(circle at 38% 35%,#f8f0e8,#d0c0a8 60%,#806850)'},
+  {e:'🙀',bg:'radial-gradient(circle at 38% 35%,#e0c8a8,#b09070 60%,#705030)'},
+  {e:'😹',bg:'radial-gradient(circle at 38% 35%,#a8d0f0,#5888c0 60%,#204878)'},
+  {e:'😺',bg:'radial-gradient(circle at 38% 35%,#f0d8c0,#c09870 60%,#705830)'},
+  {e:'😼',bg:'radial-gradient(circle at 38% 35%,#c8d8e8,#7898b0 60%,#304858)'},
+  {e:'😽',bg:'radial-gradient(circle at 38% 35%,#e8c8d8,#b07890 60%,#603850)'},
+  {e:'🐾',bg:'radial-gradient(circle at 38% 35%,#c8a8e0,#8060b0 60%,#402870)'},
+  {e:'🦴',bg:'radial-gradient(circle at 38% 35%,#f0e8d0,#c8b888 60%,#887848)'},
+  {e:'❤️',bg:'radial-gradient(circle at 38% 35%,#f08080,#c03030 60%,#701010)'},
+  {e:'🏠',bg:'radial-gradient(circle at 38% 35%,#a8e0b8,#4a8a60 60%,#1a4a2a)'},
+  {e:'🏡',bg:'radial-gradient(circle at 38% 35%,#b8e8c8,#5a9a70 60%,#2a5a3a)'},
+  {e:'🤝',bg:'radial-gradient(circle at 38% 35%,#88c8a8,#3a7858 60%,#1a4030)'},
+  {e:'🩺',bg:'radial-gradient(circle at 38% 35%,#a0c8f0,#4080c0 60%,#103870)'},
+  {e:'⭐',bg:'radial-gradient(circle at 38% 35%,#f8e870,#d0b010 60%,#806000)'},
+  {e:'📍',bg:'radial-gradient(circle at 38% 35%,#f08888,#c02828 60%,#700808)'},
+];
+let _logoIdx = 0;
+setInterval(() => {
+  _logoIdx = (_logoIdx + 1) % _logoMascotas.length;
+  const b = document.getElementById('navLogoBubble');
+  if (b) {
+    b.style.opacity = '0';
+    b.style.transform = 'scale(0.5)';
+    setTimeout(() => {
+      b.textContent = _logoMascotas[_logoIdx].e;
+      b.style.background = _logoMascotas[_logoIdx].bg;
+      b.style.opacity = '1';
+      b.style.transform = 'scale(1)';
+      b.style.transition = 'all 0.3s ease';
+    }, 200);
+  }
+}, 2500);

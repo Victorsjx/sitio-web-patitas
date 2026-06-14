@@ -959,3 +959,20 @@ function analizarMensaje(msg) {
     if (msg.includes("gracias")||msg.includes("adios")||msg.includes("chao")) return "¡Un placer ayudarte! Proteger a quienes no tienen voz es tarea de todos. 🐾❤️";
     return "🤖 No logré entender del todo. Prueba con: <strong>'alimentación'</strong>, <strong>'vacunas'</strong>, <strong>'ley cholito'</strong>, <strong>'refugio'</strong> o <strong>'veterinaria'</strong>.";
 }
+// =========================================================================
+// MENÚ HAMBURGUESA
+// =========================================================================
+function toggleMenu() {
+    const menu = document.querySelector('.menu');
+    const btn  = document.getElementById('btn-hamburguesa');
+    menu.classList.toggle('open');
+    btn.classList.toggle('open');
+}
+
+// Cerrar menú al hacer clic en un enlace
+document.querySelectorAll('.menu a').forEach(link => {
+    link.addEventListener('click', () => {
+        document.querySelector('.menu').classList.remove('open');
+        document.getElementById('btn-hamburguesa').classList.remove('open');
+    });
+});

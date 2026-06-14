@@ -693,8 +693,9 @@ function crearNuevoReporte(e) {
     enfocarMarcador(lat, lng);
 }
 
-async function manejarLoginFirebase(e) {
+async function manejarRegistroFirebase(e) {
     e.preventDefault();
+    const nombre = e.target.querySelector('input[type="text"]').value.trim();
     const email = e.target.querySelector('input[type="email"]').value.trim();
     const password = e.target.querySelector('input[type="password"]').value;
 
@@ -723,8 +724,9 @@ async function manejarRegistroFirebase(e) {
         return;
     }
 
-    try {
-        await auth.createUserWithEmailAndPassword(email, password);
+   try {
+        const credencial = await auth.createUserWithEmailAndPassword(email, password);
+        await credencial.user.updateProfile({ displayName: nombre });
         mostrarToast("Cuenta creada. Bienvenido a Patitas al Rescate.");
         cerrarModales();
     } catch (error) {

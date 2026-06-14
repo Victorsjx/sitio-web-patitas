@@ -878,7 +878,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Iniciar chatbot
     const c = document.getElementById("chatbot-messages");
-    if (c) { chatIniciado = true; }
+    if (c) { mostrarSaludoConBotones(); chatIniciado = true; }
 
     // IntersectionObserver para reveal + contadores + barras
     const observer = new IntersectionObserver((entries) => {

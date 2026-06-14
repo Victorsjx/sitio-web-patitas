@@ -70,18 +70,15 @@ body {
     align-items: center;
     gap: 10px;
     letter-spacing: -0.3px;
+    cursor: pointer;
+}
+
+.logo svg {
+    flex-shrink: 0;
 }
 
 .logo-icon {
-    background: var(--brand-green);
-    width: 36px;
-    height: 36px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    flex-shrink: 0;
+    display: none;
 }
 
 .menu {

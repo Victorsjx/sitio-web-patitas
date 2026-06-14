@@ -411,7 +411,8 @@ function _renderizar() {
                     <span>📍 ${r.comuna}</span>
                     <span>${r.fecha}</span>
                 </div>
-                ${esAdopcion ? `<div class="adopcion-cta" onclick="event.stopPropagation();mostrarToast('🤍 Abriendo ficha de adopción de ${r.titulo}...')">🤍 Quiero adoptarle</div>` : ''}
+               ${esAdopcion ? `<div class="adopcion-cta" onclick="event.stopPropagation();mostrarToast('🤍 Abriendo ficha de adopción de ${r.titulo}...')">🤍 Quiero adoptarle</div>` : ''}
+                ${usuarioActual && r.uid === usuarioActual.uid ? `<button class="btn-eliminar-reporte" onclick="event.stopPropagation();eliminarReporte('${r.id}')">🗑️ Eliminar</button>` : ''}
             </div>`;
     });
 
@@ -1071,4 +1072,14 @@ function cerrarSesion() {
     auth.signOut();
     cerrarModales();
     mostrarToast("👋 Sesión cerrada correctamente");
+}
+async function eliminarReporte(id) {
+    if (!confirm("¿Estás seguro que quieres eliminar este reporte?")) return;
+    try {
+        await db.collection("reportes").doc(id).delete();
+        mostrarToast("🗑️ Reporte eliminado correctamente.");
+    } catch (error) {
+        console.error("[Firestore] Error eliminando:", error);
+        mostrarToast("No se pudo eliminar el reporte.");
+    }
 }

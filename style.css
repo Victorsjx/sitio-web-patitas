@@ -1475,3 +1475,25 @@ body {
     color: white;
     border-color: #dc2626;
 }
+/* ==========================================
+   BOTÓN ELIMINAR REPORTE
+   ========================================== */
+.btn-eliminar-reporte {
+    margin-top: 8px;
+    width: 100%;
+    padding: 6px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid #fca5a5;
+    background: #fef2f2;
+    color: #dc2626;
+    font-weight: 700;
+    font-size: 11px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.btn-eliminar-reporte:hover {
+    background: #dc2626;
+    color: white;
+    border-color: #dc2626;
+}

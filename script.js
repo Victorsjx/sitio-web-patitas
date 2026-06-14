@@ -983,3 +983,11 @@ document.querySelectorAll('.menu a').forEach(link => {
         document.getElementById('btn-hamburguesa').classList.remove('open');
     });
 });
+function manejarClickLogin() {
+    if (usuarioActual) {
+        auth.signOut();
+        mostrarToast("👋 Sesión cerrada correctamente");
+    } else {
+        abrirModalLogin();
+    }
+}

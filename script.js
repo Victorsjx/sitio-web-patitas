@@ -655,7 +655,14 @@ renderizarPlataforma();
 // 8. MODALES
 // =========================================================================
 function abrirModalLogin()   { document.getElementById("modal-login").classList.add("open"); cambiarVistaModal('login'); }
-function abrirModalReporte() { document.getElementById("modal-reporte").classList.add("open"); }
+function abrirModalReporte() {
+    if (!usuarioActual) {
+        mostrarToast("🔐 Inicia sesión para reportar un animal.");
+        abrirModalLogin();
+        return;
+    }
+    document.getElementById("modal-reporte").classList.add("open");
+}
 function cerrarModales()     { document.querySelectorAll(".modal-overlay").forEach(m => m.classList.remove("open")); }
 
 function cambiarVistaModal(s) {
@@ -742,8 +749,18 @@ async function crearNuevoReporteFirebase(e) {
     const estado = document.getElementById("rep-estado").value;
     const comuna = document.getElementById("rep-comuna").value;
     const desc   = document.getElementById("rep-desc").value.trim();
-    const lat    = -33.4560 + (Math.random()-0.5)*0.1;
-    const lng    = -70.6300 + (Math.random()-0.5)*0.1;
+let lat = -33.4560 + (Math.random()-0.5)*0.1;
+let lng = -70.6300 + (Math.random()-0.5)*0.1;
+
+try {
+    const pos = await new Promise((resolve, reject) =>
+        navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 })
+    );
+    lat = pos.coords.latitude;
+    lng = pos.coords.longitude;
+} catch {
+    mostrarToast("📍 No se pudo obtener ubicación. Usando coordenadas aproximadas.");
+}
     const nuevoReporte = {
         id: reportesRealTime.length + 1,
         titulo,

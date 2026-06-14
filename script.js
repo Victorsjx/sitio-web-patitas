@@ -214,7 +214,12 @@ function inicializarFirebasePatitas() {
 function actualizarBotonSesion() {
     const btn = document.querySelector(".btn-login");
     if (!btn) return;
-    btn.innerText = usuarioActual ? "Mi Perfil" : "Iniciar sesion";
+    if (usuarioActual) {
+        const nombre = usuarioActual.displayName || usuarioActual.email.split("@")[0];
+        btn.innerText = "👋 Hola, " + nombre;
+    } else {
+        btn.innerText = "Iniciar sesión";
+    }
 }
 
 function normalizarReporteFirestore(doc) {

@@ -412,7 +412,7 @@ function _renderizar() {
                     <span>${r.fecha}</span>
                 </div>
                ${esAdopcion ? `<div class="adopcion-cta" onclick="event.stopPropagation();mostrarToast('🤍 Abriendo ficha de adopción de ${r.titulo}...')">🤍 Quiero adoptarle</div>` : ''}
-                ${usuarioActual && r.uid === usuarioActual.uid ? `<button class="btn-eliminar-reporte" onclick="event.stopPropagation();eliminarReporte('${r.id}')">🗑️ Eliminar</button>` : ''}
+                ${(() => { const u = usuarioActual || firebase.auth().currentUser; return u && r.uid === u.uid ? `<button class="btn-eliminar-reporte" onclick="event.stopPropagation();eliminarReporte('${r.id}')">🗑️ Eliminar</button>` : ''; })()}
             </div>`;
     });
 

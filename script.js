@@ -985,9 +985,60 @@ document.querySelectorAll('.menu a').forEach(link => {
 });
 function manejarClickLogin() {
     if (usuarioActual) {
-        auth.signOut();
-        mostrarToast("👋 Sesión cerrada correctamente");
+        abrirModalPerfil();
     } else {
         abrirModalLogin();
     }
+}
+
+function abrirModalPerfil() {
+    const nombre = usuarioActual.displayName || usuarioActual.email.split("@")[0];
+    const correo = usuarioActual.email;
+
+    document.getElementById("perfil-nombre").innerText = "👋 " + nombre;
+    document.getElementById("perfil-correo").innerText = correo;
+
+    // Contar reportes del usuario
+    const misReportes = reportesRealTime.filter(r => r.uid === usuarioActual.uid);
+    const totalReportes = misReportes.length;
+    const puntos = totalReportes * 10;
+
+    document.getElementById("perfil-reportes").innerText = totalReportes;
+    document.getElementById("perfil-puntos").innerText = puntos;
+
+    // Nivel según puntos
+    let nivel = "🐣 Básico";
+    if (puntos >= 50)  nivel = "🥈 Plata";
+    if (puntos >= 100) nivel = "🥇 Oro";
+    if (puntos >= 200) nivel = "💎 Platino";
+    if (puntos >= 500) nivel = "🦸 Héroe";
+    document.getElementById("perfil-nivel").innerText = nivel;
+
+    // Logros
+    const logros = [];
+    if (totalReportes >= 1)  logros.push("🐾 Primer reporte publicado");
+    if (totalReportes >= 5)  logros.push("⭐ 5 reportes publicados");
+    if (totalReportes >= 10) logros.push("🏆 10 reportes publicados");
+    if (logros.length === 0) logros.push("📋 Publica tu primer reporte para ganar logros");
+
+    document.getElementById("perfil-logros-lista").innerHTML = logros
+        .map(l => `<div class="logro-item">${l}</div>`).join("");
+
+    // Mis reportes
+    const listaHTML = misReportes.length === 0
+        ? `<div class="perfil-reporte-item">Aún no has publicado reportes</div>`
+        : misReportes.map(r => `
+            <div class="perfil-reporte-item">
+                <strong>${r.titulo}</strong> · ${r.comuna} · ${r.fecha}
+            </div>`).join("");
+
+    document.getElementById("perfil-reportes-lista").innerHTML = listaHTML;
+
+    document.getElementById("modal-perfil").classList.add("open");
+}
+
+function cerrarSesion() {
+    auth.signOut();
+    cerrarModales();
+    mostrarToast("👋 Sesión cerrada correctamente");
 }

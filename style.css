@@ -1370,3 +1370,108 @@ body {
 @media (max-width: 900px) {
     .menu-login-movil { display: block; }
 }
+/* ==========================================
+   MODAL PERFIL
+   ========================================== */
+.perfil-avatar {
+    width: 70px; height: 70px;
+    background: var(--brand-green-pale);
+    border: 2px solid var(--brand-green);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px;
+    margin: 0 auto 12px;
+}
+
+.perfil-stats {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin: 20px 0;
+    padding: 16px;
+    background: var(--bg-warm);
+    border-radius: var(--radius);
+    border: 1.5px solid var(--border);
+}
+
+.perfil-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+}
+
+.perfil-stat-num {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--brand-green);
+    font-family: 'Fraunces', serif;
+}
+
+.perfil-stat-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 600;
+    margin-top: 2px;
+}
+
+.perfil-logros {
+    margin-bottom: 16px;
+}
+
+.perfil-logros h4, .perfil-mis-reportes h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.logro-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: var(--bg-cream);
+    border: 1.5px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    margin-bottom: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.perfil-mis-reportes {
+    margin-bottom: 20px;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.perfil-reporte-item {
+    padding: 8px 12px;
+    background: var(--bg-cream);
+    border: 1.5px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    margin-bottom: 6px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.btn-cerrar-sesion {
+    width: 100%;
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    border: 1.5px solid #fca5a5;
+    background: #fef2f2;
+    color: #dc2626;
+    font-weight: 700;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.btn-cerrar-sesion:hover {
+    background: #dc2626;
+    color: white;
+    border-color: #dc2626;
+}

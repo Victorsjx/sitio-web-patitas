@@ -694,9 +694,8 @@ function crearNuevoReporte(e) {
     enfocarMarcador(lat, lng);
 }
 
-async function manejarRegistroFirebase(e) {
+async function manejarLoginFirebase(e) {
     e.preventDefault();
-    const nombre = e.target.querySelector('input[type="text"]').value.trim();
     const email = e.target.querySelector('input[type="email"]').value.trim();
     const password = e.target.querySelector('input[type="password"]').value;
 

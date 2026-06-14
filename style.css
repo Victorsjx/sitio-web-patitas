@@ -1365,4 +1365,8 @@ body {
         font-size: 20px;
         font-weight: 700;
     }
+}.menu-login-movil { display: none; }
+
+@media (max-width: 900px) {
+    .menu-login-movil { display: block; }
 }

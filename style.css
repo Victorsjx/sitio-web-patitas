@@ -1525,3 +1525,7 @@ body {
     font-weight: 500;
     line-height: 1.5;
 }
+@keyframes chatBounce {
+    0%,60%,100% { transform: translateY(0); }
+    30% { transform: translateY(-6px); }
+}

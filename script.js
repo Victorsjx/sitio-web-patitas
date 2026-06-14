@@ -926,105 +926,181 @@ function animarContador(el, target) {
 }
 
 // =========================================================================
-// 11. CHATBOT IA
+// 11. CHATBOT IA MEJORADO
 // =========================================================================
+let chatDarkMode = false;
+let chatHistorial = [];
+
 function toggleChat() {
     const widget = document.getElementById("chatbot-widget");
-    widget.classList.toggle("open");
-    if (widget.classList.contains("open") && !chatIniciado) {
-        mostrarSaludoConBotones();
-        chatIniciado = true;
+    const window_ = document.getElementById("chatbot-window");
+    const iconOpen = document.querySelector(".chat-icon-open");
+    const iconClose = document.querySelector(".chat-icon-close");
+    const isOpen = window_.style.display !== "none";
+    window_.style.display = isOpen ? "none" : "flex";
+    window_.style.flexDirection = "column";
+    iconOpen.style.display = isOpen ? "block" : "none";
+    iconClose.style.display = isOpen ? "none" : "block";
+    if (!isOpen && document.getElementById("chatbot-messages").children.length === 0) {
+        reiniciarChat();
     }
 }
 
-function mostrarSaludoConBotones() {
-    const contenedor = document.getElementById("chatbot-messages");
-    if (!contenedor) return;
-    contenedor.innerHTML = "";
+function toggleChatDark() {
+    chatDarkMode = !chatDarkMode;
+    const msgs = document.getElementById("chatbot-messages");
+    const hist = document.getElementById("chat-historial");
+    const inp  = document.getElementById("chatbot-input");
+    if (chatDarkMode) {
+        msgs.style.background = "#121712";
+        hist.style.background = "#1a1f1a";
+        hist.style.borderColor = "#2a382a";
+        inp.style.background   = "#1a1f1a";
+        inp.style.color        = "#e8f0e8";
+        inp.style.borderColor  = "#3a503a";
+        inp.parentElement.style.background = "#1a1f1a";
+        inp.parentElement.style.borderColor = "#2a382a";
+    } else {
+        msgs.style.background = "#f7f9f7";
+        hist.style.background = "#f7f9f7";
+        hist.style.borderColor = "#e8f0e8";
+        inp.style.background   = "white";
+        inp.style.color        = "#2d2a22";
+        inp.style.borderColor  = "#d0e8d8";
+        inp.parentElement.style.background = "white";
+        inp.parentElement.style.borderColor = "#e8f0e8";
+    }
+}
 
-    const saludo = document.createElement("div");
-    saludo.className = "msg-bot";
-    saludo.innerHTML = "¡Hola! 🐾 Soy tu <strong>Asistente Patitas 24/7</strong>.<br><br>Selecciona una opción o escribe tu consulta:";
-    contenedor.appendChild(saludo);
+function reiniciarChat() {
+    const msgs = document.getElementById("chatbot-messages");
+    msgs.innerHTML = "";
+    chatHistorial = [];
+    document.getElementById("chat-hist-items").innerHTML = "";
+    agregarMensajeChat("¡Hola! 🐾 Soy tu <strong>Asistente Patitas</strong>. ¿En qué te puedo ayudar?", "bot");
+    mostrarMenuChat();
+}
 
-    const menu = document.createElement("div");
-    menu.style.cssText = "display:flex;flex-direction:column;gap:6px;margin-top:8px;width:100%;max-width:250px;";
-
+function mostrarMenuChat() {
+    const msgs = document.getElementById("chatbot-messages");
+    const grid = document.createElement("div");
+    grid.style.cssText = "display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:4px;";
     [
-        { texto:"🍖 Guía de Alimentación", clave:"alimentacion" },
-        { texto:"🩺 Cuidados y Vacunas",   clave:"vacunas" },
-        { texto:"📜 Ley Cholito (Chile)",  clave:"ley" },
-        { texto:"🏠 Encontrar un Refugio", clave:"refugio" },
-        { texto:"🏥 Veterinarias cercanas",clave:"veterinaria" }
-    ].forEach(opc => {
+        ['🍖 Alimentación','alimentación'],
+        ['🩺 Vacunas','vacunas'],
+        ['📜 Ley Cholito','ley cholito'],
+        ['🏠 Refugios','refugio'],
+        ['🏥 Veterinarias','veterinaria'],
+        ['🐶 Razas','razas'],
+        ['✂️ Esterilización','esterilización'],
+        ['🆘 Emergencia','emergencia'],
+        ['🤍 Adopción','adopción'],
+        ['📡 Microchip','microchip'],
+    ].forEach(([label, key]) => {
         const btn = document.createElement("button");
-        btn.innerText = opc.texto;
-        btn.style.cssText = "background:#f7f4ef;border:1.5px solid #d9d0c0;color:#3d7a4f;padding:8px 12px;border-radius:10px;text-align:left;font-size:12px;cursor:pointer;font-weight:700;font-family:'Nunito','Segoe UI',sans-serif;transition:all 0.2s;";
-        btn.onmouseenter = () => { btn.style.background="#3d7a4f"; btn.style.color="#fff"; btn.style.borderColor="#3d7a4f"; };
-        btn.onmouseleave = () => { btn.style.background="#f7f4ef"; btn.style.color="#3d7a4f"; btn.style.borderColor="#d9d0c0"; };
-        btn.onclick = () => seleccionarOpcionGuiada(opc.clave);
-        menu.appendChild(btn);
+        btn.textContent = label;
+        btn.style.cssText = "background:#2d5a3d;border:1.5px solid #2d5a3d;color:white;padding:9px 10px;border-radius:12px;font-size:11.5px;font-weight:700;cursor:pointer;text-align:left;font-family:'Nunito','Segoe UI',sans-serif;transition:all 0.2s;";
+        btn.onmouseenter = () => btn.style.background = "#1a3d28";
+        btn.onmouseleave = () => btn.style.background = "#2d5a3d";
+        btn.onclick = () => enviarMensajeChat(key);
+        grid.appendChild(btn);
     });
-    contenedor.appendChild(menu);
-    contenedor.scrollTop = contenedor.scrollHeight;
+    msgs.appendChild(grid);
+    msgs.scrollTop = msgs.scrollHeight;
 }
 
-function seleccionarOpcionGuiada(clave) {
-    if (clave === 'refugio' || clave === 'veterinaria') {
-        renderizarMensaje(`Buscando ${clave === 'refugio' ? 'refugios 🏠' : 'veterinarias 🏥'} en el mapa...`, 'user');
-        setTimeout(() => {
-            filtrarLugares(clave);
-            document.querySelector('.chatbot-widget').classList.remove('open');
-            renderizarMensaje(`¡Listo! Activé el filtro de <strong>${clave === 'refugio' ? 'Refugios' : 'Veterinarias'}</strong> en el mapa. Haz scroll hacia abajo para verlos 📍`, 'bot');
-        }, 400);
-        return;
+function agregarMensajeChat(texto, tipo) {
+    const msgs = document.getElementById("chatbot-messages");
+    const div = document.createElement("div");
+    div.innerHTML = texto;
+    if (tipo === "bot") {
+        div.style.cssText = "background:white;color:#2d2a22;border-radius:4px 18px 18px 18px;padding:10px 14px;font-size:12.5px;line-height:1.55;box-shadow:0 2px 8px rgba(0,0,0,0.07);max-width:84%;font-family:'Nunito','Segoe UI',sans-serif;position:relative;";
+        const copyBtn = document.createElement("button");
+        copyBtn.innerHTML = "📋 copiar";
+        copyBtn.style.cssText = "position:absolute;bottom:-20px;right:0;font-size:10px;color:#4a7c59;cursor:pointer;background:none;border:none;font-weight:700;opacity:0;transition:opacity 0.2s;font-family:'Nunito','Segoe UI',sans-serif;";
+        div.onmouseenter = () => copyBtn.style.opacity = "1";
+        div.onmouseleave = () => copyBtn.style.opacity = "0";
+        copyBtn.onclick = () => { navigator.clipboard.writeText(div.innerText); copyBtn.innerHTML="✅ copiado"; setTimeout(()=>copyBtn.innerHTML="📋 copiar",1500); };
+        div.appendChild(copyBtn);
+    } else {
+        div.style.cssText = "background:linear-gradient(135deg,#3d7a4f,#2d5a3d);color:white;border-radius:18px 18px 4px 18px;padding:10px 14px;font-size:12.5px;line-height:1.55;max-width:84%;align-self:flex-end;font-family:'Nunito','Segoe UI',sans-serif;";
     }
-    const textos = { alimentacion:"alimentacion", vacunas:"vacunas", ley:"ley cholito" };
-    renderizarMensaje("Consultando: " + clave.toUpperCase(), 'user');
-    setTimeout(() => {
-        renderizarMensaje(analizarMensaje(textos[clave] || clave), 'bot');
-        const contenedor = document.getElementById("chatbot-messages");
-        const volver = document.createElement("div");
-        volver.innerHTML = `<span style="color:#3d7a4f;font-size:11px;cursor:pointer;text-decoration:underline;display:block;margin-top:5px;font-weight:700;">← Ver otras opciones</span>`;
-        volver.onclick = () => mostrarSaludoConBotones();
-        contenedor.appendChild(volver);
-        contenedor.scrollTop = contenedor.scrollHeight;
-    }, 400);
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+    sonarChat();
 }
 
-function evaluarEnter(e)     { if (e.key === "Enter") enviarMensajeUsuario(); }
-function enviarMensajeUsuario() {
+function sonarChat() {
+    try {
+        const ctx = new (window.AudioContext||window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain); gain.connect(ctx.destination);
+        osc.frequency.value = 520; osc.type = "sine";
+        gain.gain.setValueAtTime(0.08, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+0.25);
+        osc.start(); osc.stop(ctx.currentTime+0.25);
+    } catch(e){}
+}
+
+function actualizarHistorialChat(txt) {
+    const corto = txt.length > 18 ? txt.substring(0,18)+'...' : txt;
+    chatHistorial = [corto, ...chatHistorial.filter(h=>h!==corto)].slice(0,3);
+    const el = document.getElementById("chat-hist-items");
+    if (el) el.innerHTML = chatHistorial.map(h =>
+        `<span onclick="enviarMensajeChat('${h}')" style="font-size:10px;background:white;border:1.5px solid #e8f0e8;color:#3d7a4f;padding:3px 8px;border-radius:20px;cursor:pointer;font-weight:600;font-family:'Nunito','Segoe UI',sans-serif;">${h}</span>`
+    ).join('');
+}
+
+function mostrarTypingChat() {
+    const msgs = document.getElementById("chatbot-messages");
+    const div = document.createElement("div");
+    div.id = "chat-typing";
+    div.style.cssText = "display:flex;gap:4px;align-items:center;padding:10px 14px;background:white;border-radius:4px 18px 18px 18px;box-shadow:0 2px 8px rgba(0,0,0,0.07);width:fit-content;";
+    div.innerHTML = '<span style="width:7px;height:7px;background:#4a7c59;border-radius:50%;animation:chatBounce 1.2s ease-in-out infinite;display:block;"></span><span style="width:7px;height:7px;background:#4a7c59;border-radius:50%;animation:chatBounce 1.2s ease-in-out 0.2s infinite;display:block;"></span><span style="width:7px;height:7px;background:#4a7c59;border-radius:50%;animation:chatBounce 1.2s ease-in-out 0.4s infinite;display:block;"></span>';
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+}
+
+function enviarMensajeUsuario() { enviarMensajeChat(); }
+function evaluarEnter(e) { if (e.key === "Enter") enviarMensajeChat(); }
+
+function enviarMensajeChat(texto) {
     const input = document.getElementById("chatbot-input");
-    const texto = input.value.trim();
-    if (!texto) return;
-    renderizarMensaje(texto, 'user');
+    const msg = texto || input.value.trim();
+    if (!msg) return;
     input.value = "";
-    setTimeout(() => renderizarMensaje(analizarMensaje(texto), 'bot'), 500);
+    agregarMensajeChat(msg, "user");
+    actualizarHistorialChat(msg);
+    mostrarTypingChat();
+    setTimeout(() => {
+        document.getElementById("chat-typing")?.remove();
+        agregarMensajeChat(analizarMensajeChat(msg), "bot");
+        const msgs = document.getElementById("chatbot-messages");
+        const volver = document.createElement("span");
+        volver.innerHTML = "← Ver opciones";
+        volver.style.cssText = "color:#3d7a4f;font-size:11px;cursor:pointer;text-decoration:underline;font-weight:700;font-family:'Nunito','Segoe UI',sans-serif;";
+        volver.onclick = () => mostrarMenuChat();
+        msgs.appendChild(volver);
+        msgs.scrollTop = msgs.scrollHeight;
+    }, 700);
 }
 
-function renderizarMensaje(texto, remitente) {
-    const contenedor = document.getElementById("chatbot-messages");
-    if (!contenedor) return;
-    const globo = document.createElement("div");
-    globo.className = remitente === 'user' ? 'msg-user' : 'msg-bot';
-    globo.innerHTML = texto;
-    contenedor.appendChild(globo);
-    contenedor.scrollTop = contenedor.scrollHeight;
-}
-
-function analizarMensaje(msg) {
+function analizarMensajeChat(msg) {
     msg = msg.toLowerCase();
-    if (msg.includes("hola")||msg.includes("buenos")||msg.includes("buenas")) return "¡Hola! 🐾 ¿Cómo te puedo asistir hoy?";
-    if (msg.includes("alimentacion")||msg.includes("comida")||msg.includes("comer")||msg.includes("alimento"))
-        return "🍖 <strong>Guía de Alimentación Responsable:</strong><br><br>• <strong>Cachorros:</strong> Pellet de crecimiento alto en proteínas, 3 a 4 veces al día.<br>• <strong>Adultos:</strong> Dos porciones reguladas según su peso.<br>• <strong>Tóxicos letales:</strong> Chocolate, uvas, cebolla, ajo y huesos cocidos.";
-    if (msg.includes("cuidado")||msg.includes("salud")||msg.includes("vacuna")||msg.includes("veterinario"))
-        return "🩺 <strong>Cuidados y Salud Preventiva:</strong><br><br>• <strong>Perros:</strong> Vacuna Óctuple/Séxtuple y Antirrábica anual.<br>• <strong>Gatos:</strong> Vacuna Triple Felina y Antirrábica.<br>• <strong>Parásitos:</strong> Antipulgas mensual, desparasitación interna cada 3 meses.";
-    if (msg.includes("tenencia")||msg.includes("ley")||msg.includes("cholito")||msg.includes("legal"))
-        return "📜 <strong>Ley de Tenencia Responsable (Ley Cholito):</strong><br><br>• <strong>Microchip:</strong> Obligatorio antes de los 6 meses e inscripción en Registro Nacional.<br>• <strong>Obligaciones:</strong> Alimentación, albergue y buen trato. El dueño responde por daños civiles.<br>• <strong>Delito:</strong> El abandono y maltrato se castigan con multas y cárcel.";
-    if (msg.includes("refugio")||msg.includes("shelter")) return "🏠 Activando filtro de <strong>Refugios</strong> en el mapa. ¡Cierra el chat y haz scroll!";
-    if (msg.includes("veterinaria")||msg.includes("clinica")||msg.includes("clínica")) return "🏥 Activando filtro de <strong>Veterinarias</strong> en el mapa. ¡Cierra el chat y haz scroll!";
-    if (msg.includes("gracias")||msg.includes("adios")||msg.includes("chao")) return "¡Un placer ayudarte! Proteger a quienes no tienen voz es tarea de todos. 🐾❤️";
-    return "🤖 No logré entender del todo. Prueba con: <strong>'alimentación'</strong>, <strong>'vacunas'</strong>, <strong>'ley cholito'</strong>, <strong>'refugio'</strong> o <strong>'veterinaria'</strong>.";
+    if (msg.includes('aliment')||msg.includes('comida')||msg.includes('comer')) return `🍖 <strong>Alimentación Responsable:</strong><br><br>🐶 <strong>Perros:</strong> Cachorros: pellet de crecimiento 3-4x/día · Adultos: 2 porciones según peso · Seniors: fórmula senior<br><br>🐱 <strong>Gatos:</strong> Necesitan taurina obligatoriamente · Agua fresca siempre · Nunca comida de perro<br><br>❌ <strong>Tóxicos:</strong> Chocolate, uvas, cebolla, ajo, xilitol, huesos cocidos`;
+    if (msg.includes('vacuna')||msg.includes('salud')||msg.includes('cuidado')) return `🩺 <strong>Vacunas y Salud:</strong><br><br>🐶 Óctuple anual desde 6-8 semanas · Antirrábica obligatoria · Desparasitación cada 3 meses · Antipulgas mensual<br><br>🐱 Triple Felina anual · Antirrábica anual · Desparasitación cada 3 meses`;
+    if (msg.includes('ley')||msg.includes('cholito')||msg.includes('legal')) return `📜 <strong>Ley Cholito (Ley 21.020):</strong><br><br>✅ Microchip antes 6 meses · Inscripción Registro Nacional · Alimentación y buen trato · Correa en espacios públicos<br><br>❌ Abandono: multa 10-30 UTM · Maltrato: hasta 3 años cárcel`;
+    if (msg.includes('refugio')||msg.includes('shelter')) return `🏠 <strong>Refugios en Santiago:</strong><br><br>• Patitas con Amor — San Miguel · 📞 +56 9 8765 4321<br>• Huella Animal — La Pintana · 📞 +56 9 7234 8901<br>• El Arcoíris — Maipú · 📞 +56 9 9871 2345<br>• Callejeros con Suerte — Ñuñoa · 📞 +56 9 8234 5670`;
+    if (msg.includes('veterinaria')||msg.includes('clinica')||msg.includes('vet')) return `🏥 <strong>Veterinarias:</strong><br><br>• VetClass 24hrs — Providencia · 📞 +56 2 2236 6000<br>• Vet. Popular Maipú · 📞 +56 2 2534 7890<br>• Hospital Vet. San Bernardo 24/7 · 📞 +56 2 2812 3456`;
+    if (msg.includes('raza')||msg.includes('breed')) return `🐶 <strong>Razas y Cuidados:</strong><br><br>🏃 Alta energía: Husky, Border Collie, Golden<br>🛋️ Tranquilas: Bulldog, Shih Tzu, Pug<br>👨‍👩‍👧 Con niños: Labrador, Beagle, Boxer<br>🐱 Activos: Bengalí, Abisinio · Tranquilos: Persa, Ragdoll`;
+    if (msg.includes('esteril')||msg.includes('castrar')) return `✂️ <strong>Esterilización:</strong><br><br>✅ Previene cáncer, reduce agresividad, evita camadas no deseadas<br><br>📅 Perros: 6-9 meses · Gatos: 5-6 meses<br>💰 Desde $30.000 en vets municipales`;
+    if (msg.includes('emergencia')||msg.includes('urgencia')||msg.includes('herido')) return `🆘 <strong>Emergencia Animal:</strong><br><br>📞 Carabineros: <strong>133</strong><br>📞 VetClass 24hrs: <strong>+56 2 2236 6000</strong><br>📞 Hospital Vet. San Bernardo: <strong>+56 2 2812 3456</strong><br><br>🚨 No muevas animales heridos · Cúbrelo con manta · Habla suave`;
+    if (msg.includes('adopt')) return `🤍 <strong>Adoptar una mascota:</strong><br><br>✅ Considera: espacio, tiempo, gastos vet mensuales y compromiso de 10-15 años<br><br>📍 Activa el filtro Refugios en el mapa para ver animales en adopción`;
+    if (msg.includes('microchip')||msg.includes('chip')) return `📡 <strong>Microchip:</strong><br><br>• Obligatorio antes de los 6 meses<br>• Costo: desde $5.000 en vets municipales<br>• Se inserta bajo la piel sin anestesia<br>• Registro en: registronacional.cl`;
+    if (msg.includes('hola')||msg.includes('buenas')) return '¡Hola! 🐾 ¿En qué te puedo ayudar hoy?';
+    if (msg.includes('gracias')||msg.includes('adios')||msg.includes('chao')) return '¡Un placer ayudarte! 🐾❤️';
+    return '🤖 Prueba con: <strong>alimentación, vacunas, ley cholito, refugio, veterinaria, razas, esterilización, adopción, microchip</strong> o <strong>emergencia</strong>.';
 }
 // =========================================================================
 // MENÚ HAMBURGUESA

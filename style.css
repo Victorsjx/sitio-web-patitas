@@ -1584,3 +1584,6 @@ h1, h2 {
     display: inline-block;
     border: 1.5px solid rgba(26, 45, 90, 0.2);
 }
+.modal-card {
+    overflow: visible !important;
+}

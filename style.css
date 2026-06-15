@@ -1576,7 +1576,7 @@ h1, h2 {
 
 .badge-proximamente {
     background: var(--brand-green);
-    color: black;
+    color: white;
     padding: 8px 20px;
     border-radius: 20px;
     font-size: 0.9rem;

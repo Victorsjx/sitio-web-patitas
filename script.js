@@ -954,6 +954,14 @@ function filtrarComunas(texto) {
     dropdown.innerHTML = resultados.map(c => `
     <div onmousedown="seleccionarComuna('${c}')" ontouchstart="seleccionarComuna('${c}')" style="padding:12px 14px;cursor:pointer;font-size:14px;font-family:'Nunito','Segoe UI',sans-serif;border-bottom:1px solid #f0f0f0;background:white;" onmouseenter="this.style.background='#f0f8f2'" onmouseleave="this.style.background='white'">${c}</div>
 `).join('');
+}
+
+function seleccionarComuna(nombre) {
+    document.getElementById("rep-comuna-input").value = nombre;
+    document.getElementById("rep-comuna").value = nombre;
+    document.getElementById("comuna-dropdown").style.display = "none";
+}
+
 // =========================================================================
 // 9. TOAST ANIMADO (entrada lateral)
 // =========================================================================

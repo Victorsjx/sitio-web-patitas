@@ -939,23 +939,31 @@ function mostrarComunas() {
 
 function filtrarComunas(texto) {
     const dropdown = document.getElementById("comuna-dropdown");
-    const resultados = todasLasComunas.filter(c =>
-        c.toLowerCase().includes(texto.toLowerCase())
-    );
-    if (resultados.length === 0 || texto.length === 0 && resultados.length > 10) {
-        const primeras = texto.length === 0 ? todasLasComunas.slice(0, 8) : resultados;
-        dropdown.style.display = "block";
-        dropdown.innerHTML = primeras.map(c => `
-            <div onclick="seleccionarComuna('${c}')" style="padding:10px 14px;cursor:pointer;font-size:13px;font-family:'Nunito','Segoe UI',sans-serif;border-bottom:1px solid #f0f0f0;" onmouseenter="this.style.background='#f0f8f2'" onmouseleave="this.style.background='white'">${c}</div>
-        `).join('');
+    if (!dropdown) return;
+    
+    const resultados = texto.length === 0 
+        ? todasLasComunas.slice(0, 8)
+        : todasLasComunas.filter(c => c.toLowerCase().includes(texto.toLowerCase())).slice(0, 8);
+
+    if (resultados.length === 0) {
+        dropdown.style.display = "none";
         return;
     }
-    dropdown.style.display = resultados.length > 0 ? "block" : "none";
-    dropdown.innerHTML = resultados.slice(0,8).map(c => `
-        <div onclick="seleccionarComuna('${c}')" style="padding:10px 14px;cursor:pointer;font-size:13px;font-family:'Nunito','Segoe UI',sans-serif;border-bottom:1px solid #f0f0f0;" onmouseenter="this.style.background='#f0f8f2'" onmouseleave="this.style.background='white'">${c}</div>
+
+    dropdown.style.display = "block";
+    dropdown.style.position = "fixed";
+    
+    const input = document.getElementById("rep-comuna-input");
+    const rect = input.getBoundingClientRect();
+    dropdown.style.top = (rect.bottom) + "px";
+    dropdown.style.left = rect.left + "px";
+    dropdown.style.width = rect.width + "px";
+    dropdown.style.zIndex = "99999";
+
+    dropdown.innerHTML = resultados.map(c => `
+        <div onclick="seleccionarComuna('${c}')" style="padding:12px 14px;cursor:pointer;font-size:14px;font-family:'Nunito','Segoe UI',sans-serif;border-bottom:1px solid #f0f0f0;background:white;" onmouseenter="this.style.background='#f0f8f2'" onmouseleave="this.style.background='white'">${c}</div>
     `).join('');
 }
-
 function seleccionarComuna(nombre) {
     document.getElementById("rep-comuna-input").value = nombre;
     document.getElementById("rep-comuna").value = nombre;

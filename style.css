@@ -1575,11 +1575,12 @@ h1, h2 {
 }
 
 .badge-proximamente {
-    background: var(--brand-green);
-    color: white;
+    background: var(--brand-green-pale);
+    color: var(--brand-green-dark);
     padding: 8px 20px;
     border-radius: 20px;
     font-size: 0.9rem;
     font-weight: 700;
     display: inline-block;
+    border: 1.5px solid rgba(26, 45, 90, 0.2);
 }

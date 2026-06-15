@@ -1043,7 +1043,22 @@ function animarContador(el, target) {
 // =========================================================================
 let chatDarkMode = false;
 let chatHistorial = [];
-
+function toggleChatDark() {
+    chatDarkMode = !chatDarkMode;
+    const container = document.getElementById("chatbot-container");
+    if (!container) return;
+    if (chatDarkMode) {
+        container.style.background = "#1a1a2e";
+        container.style.color = "#e0e0e0";
+        const msgs = document.getElementById("chatbot-messages");
+        if (msgs) msgs.style.background = "#16213e";
+    } else {
+        container.style.background = "";
+        container.style.color = "";
+        const msgs = document.getElementById("chatbot-messages");
+        if (msgs) msgs.style.background = "";
+    }
+}
 function toggleChat() {
     const widget = document.getElementById("chatbot-widget");
     const isOpen = widget.classList.contains("open");

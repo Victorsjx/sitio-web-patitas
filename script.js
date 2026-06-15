@@ -886,7 +886,88 @@ try {
     enfocarMarcador(lat, lng);
     e.target.reset();
 }
+const todasLasComunas = [
+    "Santiago Centro","Providencia","Ñuñoa","Recoleta","Independencia","Estación Central",
+    "Las Condes","Vitacura","Lo Barnechea","La Reina","Peñalolén","Macul","La Florida",
+    "San Bernardo","La Pintana","San Miguel","El Bosque","La Cisterna","San Ramón","Maipú",
+    "Pudahuel","Cerrillos","Cerro Navia","Lo Espejo","Renca","Quilicura","Huechuraba",
+    "Conchalí","Colina","Lampa","Tiltil","Puente Alto","Pirque","San José de Maipo",
+    "Talagante","El Monte","Isla de Maipo","Padre Hurtado","Peñaflor","Buin","Paine",
+    "Melipilla","Curacaví","María Pinto","San Pedro","Valparaíso","Viña del Mar","Quilpué",
+    "Villa Alemana","Concón","San Antonio","Cartagena","El Quisco","El Tabo","Santo Domingo",
+    "Algarrobo","San Felipe","Los Andes","Cabildo","Petorca","La Ligua","Papudo","Zapallar",
+    "Puchuncaví","Quintero","Nogales","La Calera","Quillota","La Cruz","Limache","Olmué",
+    "Casablanca","Putaendo","Santa María","Panquehue","Llaillay","Catemu","Rinconada",
+    "Isla de Pascua","Rancagua","San Fernando","Santa Cruz","Pichilemu","Rengo","Chimbarongo",
+    "San Vicente","Peumo","Las Cabras","Graneros","Machalí","Mostazal","Doñihue","Coinco",
+    "Coltauco","Quinta de Tilcoco","Requínoa","Malloa","Olivar","Pichidegua","Placilla",
+    "Nancagua","Chépica","Palmilla","Peralillo","Litueche","La Estrella","Marchigüe",
+    "Paredones","Pumanque","Lolol","Navidad","Talca","Curicó","Linares","Constitución",
+    "Cauquenes","Parral","San Javier","Villa Alegre","Yerbas Buenas","Colbún","Longaví",
+    "Retiro","Pelluhue","Chanco","Empedrado","Maule","Pelarco","Pencahue","Río Claro",
+    "San Clemente","San Rafael","Sagrada Familia","Teno","Romeral","Molina","Hualañé",
+    "Licantén","Vichuquén","Rauco","Curepto","Chillán","Chillán Viejo","San Carlos","Bulnes",
+    "Coihueco","Quirihue","Yungay","Ñiquén","San Fabián","San Nicolás","Pinto","Pemuco",
+    "El Carmen","Portezuelo","Ninhue","Cobquecura","Treguaco","Ranquil","Concepción",
+    "Talcahuano","Los Ángeles","Coronel","Tomé","Lota","Penco","Hualqui","Santa Juana",
+    "Florida","Quillón","Yumbel","Cabrero","Tucapel","Antuco","Quilaco","Mulchén","Negrete",
+    "Nacimiento","Lebu","Arauco","Cañete","Contulmo","Curanilahue","Los Álamos","Tirúa",
+    "Temuco","Villarrica","Pucón","Angol","Victoria","Lautaro","Pitrufquén","Gorbea",
+    "Loncoche","Nueva Imperial","Carahue","Cholchol","Traiguén","Lumaco","Purén","Los Sauces",
+    "Collipulli","Ercilla","Lonquimay","Curacautín","Vilcún","Melipeuco","Cunco","Freire",
+    "Teodoro Schmidt","Saavedra","Toltén","Curarrehue","Renaico","Valdivia","La Unión",
+    "Río Bueno","Mariquina","Lanco","Los Lagos","Futrono","Lago Ranco","Paillaco","Panguipulli",
+    "Corral","Máfil","Puerto Montt","Puerto Varas","Osorno","Castro","Ancud","Chonchi",
+    "Queilén","Quellón","Dalcahue","Curaco de Vélez","Quinchao","Quemchi","Puqueldón",
+    "Puerto Octay","Frutillar","Los Muermos","Llanquihue","Fresia","Calbuco","Maullín",
+    "San Pablo","Río Negro","Purranque","Puyehue","Cochamó","Hualaihué","Chaitén","Futaleufú",
+    "Palena","Coyhaique","Puerto Aysén","Chile Chico","Cochrane","Tortel","Lago Verde",
+    "La Junta","Puyuhuapi","Cisnes","Guaitecas","Río Ibáñez","Punta Arenas","Puerto Natales",
+    "Porvenir","Puerto Williams","Primavera","Timaukel","Laguna Blanca","Río Verde",
+    "San Gregorio","Cabo de Hornos","Copiapó","Vallenar","Chañaral","Diego de Almagro",
+    "Caldera","Tierra Amarilla","Freirina","Huasco","Alto del Carmen","La Serena","Coquimbo",
+    "Ovalle","Illapel","Salamanca","Los Vilos","Combarbalá","Punitaqui","Monte Patria",
+    "Canela","Andacollo","La Higuera","Vicuña","Paiguano","Río Hurtado","Antofagasta",
+    "Calama","Tocopilla","Mejillones","Sierra Gorda","Taltal","San Pedro de Atacama",
+    "Ollagüe","María Elena","Iquique","Alto Hospicio","Pozo Almonte","Pica","Huara",
+    "Camiña","Colchane","Arica","Putre","General Lagos","Camarones"
+];
 
+function mostrarComunas() {
+    filtrarComunas(document.getElementById("rep-comuna-input").value);
+}
+
+function filtrarComunas(texto) {
+    const dropdown = document.getElementById("comuna-dropdown");
+    const resultados = todasLasComunas.filter(c =>
+        c.toLowerCase().includes(texto.toLowerCase())
+    );
+    if (resultados.length === 0 || texto.length === 0 && resultados.length > 10) {
+        const primeras = texto.length === 0 ? todasLasComunas.slice(0, 8) : resultados;
+        dropdown.style.display = "block";
+        dropdown.innerHTML = primeras.map(c => `
+            <div onclick="seleccionarComuna('${c}')" style="padding:10px 14px;cursor:pointer;font-size:13px;font-family:'Nunito','Segoe UI',sans-serif;border-bottom:1px solid #f0f0f0;" onmouseenter="this.style.background='#f0f8f2'" onmouseleave="this.style.background='white'">${c}</div>
+        `).join('');
+        return;
+    }
+    dropdown.style.display = resultados.length > 0 ? "block" : "none";
+    dropdown.innerHTML = resultados.slice(0,8).map(c => `
+        <div onclick="seleccionarComuna('${c}')" style="padding:10px 14px;cursor:pointer;font-size:13px;font-family:'Nunito','Segoe UI',sans-serif;border-bottom:1px solid #f0f0f0;" onmouseenter="this.style.background='#f0f8f2'" onmouseleave="this.style.background='white'">${c}</div>
+    `).join('');
+}
+
+function seleccionarComuna(nombre) {
+    document.getElementById("rep-comuna-input").value = nombre;
+    document.getElementById("rep-comuna").value = nombre;
+    document.getElementById("comuna-dropdown").style.display = "none";
+}
+
+document.addEventListener("click", (e) => {
+    if (!e.target.closest("#comuna-dropdown") && e.target.id !== "rep-comuna-input") {
+        const d = document.getElementById("comuna-dropdown");
+        if (d) d.style.display = "none";
+    }
+});
 function irAInicio() { window.scrollTo({ top:0, behavior:'smooth' }); }
 function abrirGuiaTenencia() { toggleChat(); const i = document.getElementById("chatbot-input"); if(i){i.value="Háblame de la ley cholito"; enviarMensajeUsuario();} }
 

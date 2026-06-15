@@ -952,11 +952,18 @@ function filtrarComunas(texto) {
     }
 
     const rect = input.getBoundingClientRect();
-dropdown.style.display = "block";
-dropdown.style.top = (rect.bottom + 4) + "px";
-dropdown.style.position = "fixed";
-dropdown.style.left = rect.left + "px";
-dropdown.style.width = rect.width + "px";
+    dropdown.style.display = "block";
+    dropdown.style.position = "fixed";
+    dropdown.style.top = (rect.bottom + 4) + "px";
+    dropdown.style.left = rect.left + "px";
+    dropdown.style.width = rect.width + "px";
+    dropdown.style.maxHeight = "180px";
+    dropdown.style.overflowY = "auto";
+    dropdown.style.zIndex = "99999";
+    dropdown.style.borderRadius = "12px";
+    dropdown.style.boxShadow = "0 8px 24px rgba(0,0,0,0.12)";
+    dropdown.style.border = "1.5px solid #d0e8d8";
+    dropdown.style.background = "white";
 
     dropdown.innerHTML = resultados.map(c => `
         <div onclick="seleccionarComuna('${c}')" style="padding:12px 14px;cursor:pointer;font-size:14px;font-family:'Nunito','Segoe UI',sans-serif;border-bottom:1px solid #f0f0f0;background:white;" onmouseenter="this.style.background='#f0f8f2'" onmouseleave="this.style.background='white'">${c}</div>

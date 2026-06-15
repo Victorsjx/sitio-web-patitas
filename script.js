@@ -791,8 +791,56 @@ async function crearNuevoReporteFirebase(e) {
     const estado = document.getElementById("rep-estado").value;
     const comuna = document.getElementById("rep-comuna").value;
     const desc   = document.getElementById("rep-desc").value.trim();
-let lat = -33.4560 + (Math.random()-0.5)*0.1;
-let lng = -70.6300 + (Math.random()-0.5)*0.1;
+const coordsComunas = {
+    "Santiago Centro":[-33.4569,-70.6483],"Providencia":[-33.4317,-70.6142],
+    "Ñuñoa":[-33.4561,-70.5980],"Recoleta":[-33.4100,-70.6440],
+    "Independencia":[-33.4200,-70.6580],"Estación Central":[-33.4558,-70.6820],
+    "Las Condes":[-33.4117,-70.5765],"Vitacura":[-33.3836,-70.5756],
+    "Lo Barnechea":[-33.3528,-70.5203],"La Reina":[-33.4502,-70.5490],
+    "Peñalolén":[-33.4883,-70.5372],"Macul":[-33.4877,-70.5855],
+    "La Florida":[-33.5235,-70.5887],"San Bernardo":[-33.5920,-70.6990],
+    "La Pintana":[-33.5750,-70.6280],"San Miguel":[-33.4972,-70.6531],
+    "El Bosque":[-33.5600,-70.6700],"La Cisterna":[-33.5272,-70.6636],
+    "San Ramón":[-33.5400,-70.6400],"Maipú":[-33.5127,-70.7682],
+    "Pudahuel":[-33.4431,-70.7456],"Cerrillos":[-33.4939,-70.7142],
+    "Cerro Navia":[-33.4272,-70.7328],"Lo Espejo":[-33.5200,-70.6900],
+    "Renca":[-33.4050,-70.7300],"Quilicura":[-33.3617,-70.7300],
+    "Huechuraba":[-33.3700,-70.6600],"Conchalí":[-33.3817,-70.6631],
+    "Colina":[-33.2019,-70.6742],"Lampa":[-33.2886,-70.8803],
+    "Puente Alto":[-33.6100,-70.5758],"Pirque":[-33.6378,-70.5628],
+    "San José de Maipo":[-33.6478,-70.3528],"Talagante":[-33.6614,-70.9311],
+    "El Monte":[-33.6878,-71.0228],"Isla de Maipo":[-33.7378,-70.9028],
+    "Padre Hurtado":[-33.5614,-70.8211],"Peñaflor":[-33.6114,-70.8711],
+    "Buin":[-33.7314,-70.7358],"Paine":[-33.8128,-70.7400],
+    "Melipilla":[-33.6878,-71.2128],"Curacaví":[-33.3978,-71.1428],
+    "Valparaíso":[-33.0472,-71.6127],"Viña del Mar":[-33.0245,-71.5518],
+    "Quilpué":[-33.0500,-71.4333],"Villa Alemana":[-33.0428,-71.3742],
+    "San Antonio":[-33.5928,-71.6142],"San Felipe":[-32.7528,-70.7242],
+    "Los Andes":[-32.8328,-70.5942],"La Calera":[-32.7828,-71.1942],
+    "Quillota":[-32.8728,-71.2442],"Limache":[-33.0028,-71.2642],
+    "Rancagua":[-34.1703,-70.7442],"San Fernando":[-34.5828,-70.9842],
+    "Santa Cruz":[-34.6428,-71.3642],"Pichilemu":[-34.3828,-72.0042],
+    "Talca":[-35.4264,-71.6553],"Curicó":[-34.9864,-71.2353],
+    "Linares":[-35.8464,-71.5953],"Constitución":[-35.3364,-72.4153],
+    "Concepción":[-36.8270,-73.0503],"Talcahuano":[-36.7264,-73.1153],
+    "Los Ángeles":[-37.4664,-72.3553],"Chillán":[-36.6064,-72.1053],
+    "Temuco":[-38.7359,-72.5904],"Villarrica":[-39.2764,-72.2253],
+    "Pucón":[-39.2764,-71.9753],"Angol":[-37.7964,-72.7053],
+    "Valdivia":[-39.8142,-73.2459],"La Unión":[-40.2964,-73.0853],
+    "Osorno":[-40.5714,-73.1342],"Puerto Montt":[-41.4693,-72.9424],
+    "Puerto Varas":[-41.3264,-72.9853],"Castro":[-42.4764,-73.7653],
+    "Ancud":[-41.8664,-73.8253],"Coyhaique":[-45.5752,-72.0662],
+    "Puerto Natales":[-51.7264,-72.4953],"Punta Arenas":[-53.1638,-70.9171],
+    "Antofagasta":[-23.6509,-70.3975],"Calama":[-22.4564,-68.9253],
+    "Copiapó":[-27.3668,-70.3314],"Vallenar":[-28.5764,-70.7553],
+    "La Serena":[-29.9027,-71.2519],"Coquimbo":[-29.9564,-71.3453],
+    "Ovalle":[-30.5964,-71.1953],"Iquique":[-20.2141,-70.1524],
+    "Arica":[-18.4746,-70.2979]
+};
+const comunaSeleccionada = document.getElementById("rep-comuna").value;
+let [lat, lng] = coordsComunas[comunaSeleccionada] || [-33.4560,-70.6300];
+lat += (Math.random()-0.5)*0.01;
+lng += (Math.random()-0.5)*0.01;
 
 try {
     const pos = await new Promise((resolve, reject) =>

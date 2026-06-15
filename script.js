@@ -942,22 +942,21 @@ function toggleChat() {
             reiniciarChat();
         }
     }
-    setTimeout(() => {
-        const tooltip = document.getElementById("chat-tooltip");
-        if (tooltip) tooltip.remove();
-    }, 100);
-    setTimeout(() => {
-        const widget = document.getElementById("chatbot-widget");
-        if (!widget.classList.contains("open")) {
-            const tooltip = document.createElement("div");
-            tooltip.id = "chat-tooltip";
-            tooltip.textContent = "¿Tienes dudas sobre animales? ¡Pregúntame! 🐾";
-            tooltip.style.cssText = "position:fixed;bottom:100px;right:28px;background:white;border:1.5px solid #d9d0c0;border-radius:12px;padding:10px 14px;font-size:12px;font-weight:600;color:#1a2d5a;max-width:180px;line-height:1.4;box-shadow:0 4px 14px rgba(0,0,0,0.1);font-family:'Nunito','Segoe UI',sans-serif;z-index:999;pointer-events:none;";
-            document.body.appendChild(tooltip);
-            setTimeout(() => tooltip.remove(), 6000);
-        }
-    }, 3000);
+    const tooltip = document.getElementById("chat-tooltip");
+    if (tooltip) tooltip.remove();
 }
+
+setTimeout(() => {
+    const w = document.getElementById("chatbot-widget");
+    if (w && !w.classList.contains("open")) {
+        const t = document.createElement("div");
+        t.id = "chat-tooltip";
+        t.textContent = "¿Tienes dudas sobre animales? ¡Pregúntame! 🐾";
+        t.style.cssText = "position:fixed;bottom:100px;right:28px;background:white;border:1.5px solid #d9d0c0;border-radius:12px;padding:10px 14px;font-size:12px;font-weight:600;color:#1a2d5a;max-width:180px;line-height:1.4;box-shadow:0 4px 14px rgba(0,0,0,0.1);font-family:'Nunito','Segoe UI',sans-serif;z-index:999;pointer-events:none;";
+        document.body.appendChild(t);
+        setTimeout(() => t.remove(), 6000);
+    }
+}, 3000);
 function reiniciarChat() {
     const msgs = document.getElementById("chatbot-messages");
     msgs.innerHTML = "";

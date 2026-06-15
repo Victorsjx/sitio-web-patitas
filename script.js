@@ -951,19 +951,19 @@ function filtrarComunas(texto) {
     }
 
     dropdown.style.display = "block";
-    dropdown.style.position = "fixed";
-    
-    const input = document.getElementById("rep-comuna-input");
-    const rect = input.getBoundingClientRect();
-    dropdown.style.top = (rect.bottom) + "px";
-    dropdown.style.left = rect.left + "px";
-    dropdown.style.width = rect.width + "px";
+    dropdown.style.position = "absolute";
+    dropdown.style.top = "100%";
+    dropdown.style.left = "0";
+    dropdown.style.width = "100%";
     dropdown.style.zIndex = "99999";
+    dropdown.style.maxHeight = "180px";
+    dropdown.style.overflowY = "auto";
 
     dropdown.innerHTML = resultados.map(c => `
         <div onclick="seleccionarComuna('${c}')" style="padding:12px 14px;cursor:pointer;font-size:14px;font-family:'Nunito','Segoe UI',sans-serif;border-bottom:1px solid #f0f0f0;background:white;" onmouseenter="this.style.background='#f0f8f2'" onmouseleave="this.style.background='white'">${c}</div>
     `).join('');
 }
+
 function seleccionarComuna(nombre) {
     document.getElementById("rep-comuna-input").value = nombre;
     document.getElementById("rep-comuna").value = nombre;

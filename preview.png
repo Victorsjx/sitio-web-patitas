@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 680 357">
+<rect width="680" height="357" fill="#1a2d5a"/>
+<rect x="0" y="0" width="8" height="357" fill="#f5c518"/>
+<rect x="0" y="310" width="680" height="47" fill="#0f1a35"/>
+<rect x="0" y="306" width="680" height="6" fill="#f5c518"/>
+<circle cx="620" cy="50" r="160" fill="#2a3f7a" opacity="0.25"/>
+<circle cx="60" cy="320" r="120" fill="#2a3f7a" opacity="0.2"/>
+<text x="40" y="105" font-family="Arial Black, sans-serif" font-size="72" font-weight="900" fill="white" letter-spacing="-2">PATITAS</text>
+<text x="40" y="185" font-family="Arial Black, sans-serif" font-size="72" font-weight="900" fill="#f5c518" letter-spacing="-2">AL RESCATE</text>
+<rect x="40" y="200" width="600" height="3" fill="#f5c518" opacity="0.3" rx="2"/>
+<text x="40" y="240" font-family="Arial, sans-serif" font-size="22" fill="white" opacity="0.8" letter-spacing="3">TECNOLOGÍA QUE SALVA VIDAS ANIMALES</text>
+<text x="40" y="275" font-family="Arial, sans-serif" font-size="16" fill="white" opacity="0.5">Reporta · Adopta · Protege</text>
+<rect x="40" y="320" width="200" height="28" fill="#f5c518" rx="6"/>
+<text x="140" y="339" font-family="Arial, sans-serif" font-size="13" font-weight="700" fill="#1a2d5a" text-anchor="middle">victorsjx.github.io</text>
+<text x="640" y="339" font-family="Arial, sans-serif" font-size="11" fill="white" opacity="0.3" text-anchor="end">Plataforma de rescate animal · Chile</text>
+</svg>

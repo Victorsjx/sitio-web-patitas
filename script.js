@@ -931,18 +931,18 @@ function animarContador(el, target) {
 let chatDarkMode = false;
 let chatHistorial = [];
 
-function toggleChat() {
+setTimeout(() => {
     const widget = document.getElementById("chatbot-widget");
-    const isOpen = widget.classList.contains("open");
-    if (isOpen) {
-        widget.classList.remove("open");
-    } else {
-        widget.classList.add("open");
-        if (document.getElementById("chatbot-messages").children.length === 0) {
-            reiniciarChat();
-        }
+    if (!widget.classList.contains("open")) {
+        const tooltip = document.createElement("div");
+        tooltip.id = "chat-tooltip";
+        tooltip.textContent = "¿Tienes dudas sobre animales? ¡Pregúntame! 🐾";
+        tooltip.style.cssText = "position:absolute;bottom:70px;right:0;background:white;border:1.5px solid #d9d0c0;border-radius:12px;padding:10px 14px;font-size:12px;font-weight:600;color:#1a2d5a;max-width:180px;line-height:1.4;box-shadow:0 4px 14px rgba(0,0,0,0.1);font-family:'Nunito','Segoe UI',sans-serif;cursor:pointer;";
+        tooltip.onclick = () => { tooltip.remove(); toggleChat(); };
+        widget.appendChild(tooltip);
+        setTimeout(() => tooltip.remove(), 6000);
     }
-}
+}, 3000);
 
 function toggleChatDark() {
     chatDarkMode = !chatDarkMode;

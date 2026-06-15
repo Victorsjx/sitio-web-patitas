@@ -1541,3 +1541,34 @@ h1, h2 {
     background: #d4a800 !important;
     color: #1a2d5a !important;
 }
+.donaciones-proximamente {
+    text-align: center;
+    padding: 60px 20px;
+    background: var(--card);
+    border-radius: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.proximamente-icon {
+    font-size: 60px;
+    margin-bottom: 16px;
+}
+
+.donaciones-proximamente h3 {
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+}
+
+.donaciones-proximamente p {
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+}
+
+.badge-proximamente {
+    background: var(--accent);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}

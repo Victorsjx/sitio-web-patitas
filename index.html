@@ -202,71 +202,20 @@
         </div>
     </section>
 
-    <!-- DONACIONES -->
-    <section class="donaciones-section">
-        <div class="donaciones-header">
-            <span class="sub-green">TU AYUDA SALVA VIDAS</span>
-            <h2>Apoya nuestro impacto local</h2>
-            <p>Cada donación se destina directamente a rescatistas independientes y clínicas veterinarias asociadas.</p>
-        </div>
-        <div class="grid-donaciones">
-            <div class="donacion-card">
-                <div class="donacion-icon">🩹</div>
-                <h3>Kit de Primeros Auxilios</h3>
-                <p>Aporta insumos médicos básicos, gasas y antisépticos para un rescate en ruta.</p>
-                <button class="btn-donar" onclick="mostrarToast('💳 Conectando con pasarela de pago para $5.000 CLP...')">$5.000 CLP</button>
-            </div>
-            <div class="donacion-card destacado">
-                <div class="donacion-icon">🍲</div>
-                <h3>Alimento por un Mes</h3>
-                <p>Asegura la nutrición completa de un perrito o gatito rescatado en su hogar temporal.</p>
-                <button class="btn-donar primary" onclick="mostrarToast('💳 Conectando con pasarela de pago para $15.000 CLP...')">$15.000 CLP</button>
-            </div>
-            <div class="donacion-card">
-                <div class="donacion-icon">🩺</div>
-                <h3>Consulta Veterinaria</h3>
-                <p>Financia una atención profesional, vacunas obligatorias o desparasitación.</p>
-                <button class="btn-donar" onclick="mostrarToast('💳 Conectando con pasarela de pago para $25.000 CLP...')">$25.000 CLP</button>
-            </div>
-        </div>
-    </section>
-</main>
-<!-- MODAL: PERFIL -->
-<div class="modal-overlay" id="modal-perfil">
-    <div class="modal-card">
-        <button class="modal-close" onclick="cerrarModales()">✕</button>
-        <div class="perfil-avatar">👤</div>
-        <h3 id="perfil-nombre">Cargando...</h3>
-        <p class="modal-subtitle" id="perfil-correo"></p>
-
-        <div class="perfil-stats">
-            <div class="perfil-stat">
-                <span class="perfil-stat-num" id="perfil-reportes">0</span>
-                <span class="perfil-stat-label">Reportes</span>
-            </div>
-            <div class="perfil-stat">
-                <span class="perfil-stat-num" id="perfil-puntos">0</span>
-                <span class="perfil-stat-label">Puntos</span>
-            </div>
-            <div class="perfil-stat">
-                <span class="perfil-stat-num" id="perfil-nivel">🐾</span>
-                <span class="perfil-stat-label">Nivel</span>
-            </div>
-        </div>
-
-        <div class="perfil-logros">
-            <h4>🏆 Mis logros</h4>
-            <div id="perfil-logros-lista"></div>
-        </div>
-
-        <div class="perfil-mis-reportes">
-            <h4>📍 Mis reportes</h4>
-            <div id="perfil-reportes-lista"></div>
-        </div>
-
-        <button class="btn-cerrar-sesion" onclick="cerrarSesion()">🚪 Cerrar sesión</button>
+<!-- DONACIONES -->
+<section class="donaciones-section">
+    <div class="donaciones-header">
+        <span class="sub-green">TU AYUDA SALVA VIDAS</span>
+        <h2>Apoya nuestro impacto local</h2>
+        <p>Estamos construyendo alianzas con refugios chilenos verificados. Pronto podrás donar directamente a causas reales y transparentes.</p>
     </div>
-</div>
+    <div class="donaciones-proximamente">
+        <div class="proximamente-icon">🐾</div>
+        <h3>Donaciones coming soon</h3>
+        <p>Cada peso irá directo a refugios y rescatistas independientes asociados a Patitas al Rescate. Nos quedamos con un pequeño porcentaje de gestión para mantener la plataforma.</p>
+        <span class="badge-proximamente">Próximamente disponible</span>
+    </div>
+</section>
 <!-- MODAL: FICHA REPORTE -->
 <div class="modal-overlay" id="modal-ficha">
     <div class="modal-card">

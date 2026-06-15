@@ -953,7 +953,8 @@ function filtrarComunas(texto) {
 
     const rect = input.getBoundingClientRect();
 dropdown.style.display = "block";
-dropdown.style.top = (rect.bottom + window.scrollY + 4) + "px";
+dropdown.style.top = (rect.bottom + 4) + "px";
+dropdown.style.position = "fixed";
 dropdown.style.left = rect.left + "px";
 dropdown.style.width = rect.width + "px";
 

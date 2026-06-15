@@ -952,10 +952,10 @@ function filtrarComunas(texto) {
     }
 
     const rect = input.getBoundingClientRect();
-    dropdown.style.display = "block";
-    dropdown.style.top = (rect.bottom + 4) + "px";
-    dropdown.style.left = rect.left + "px";
-    dropdown.style.width = rect.width + "px";
+dropdown.style.display = "block";
+dropdown.style.top = (rect.bottom + window.scrollY + 4) + "px";
+dropdown.style.left = rect.left + "px";
+dropdown.style.width = rect.width + "px";
 
     dropdown.innerHTML = resultados.map(c => `
         <div onclick="seleccionarComuna('${c}')" style="padding:12px 14px;cursor:pointer;font-size:14px;font-family:'Nunito','Segoe UI',sans-serif;border-bottom:1px solid #f0f0f0;background:white;" onmouseenter="this.style.background='#f0f8f2'" onmouseleave="this.style.background='white'">${c}</div>

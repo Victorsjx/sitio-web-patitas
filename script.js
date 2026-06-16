@@ -754,13 +754,28 @@ async function manejarLoginFirebase(e) {
     }
 
     try {
-        await auth.signInWithEmailAndPassword(email, password);
-        mostrarToast("Sesion iniciada correctamente.");
+        const credencial = await auth.signInWithEmailAndPassword(email, password);
+        if (!credencial.user.emailVerified) {
+            mostrarToast("📧 Verifica tu correo antes de iniciar sesión. Revisa tu bandeja.");
+            auth.signOut();
+            return;
+        }
+        mostrarToast("✅ Sesión iniciada correctamente.");
         cerrarModales();
         actualizarBotonSesion();
     } catch (error) {
         console.error("[Auth] Error iniciando sesion:", error);
-        mostrarToast("No pude iniciar sesion. Revisa correo y contrasena.");
+        if (error.code === 'auth/user-not-found') {
+            mostrarToast("❌ No existe una cuenta con ese correo.");
+        } else if (error.code === 'auth/wrong-password') {
+            mostrarToast("❌ Contraseña incorrecta. Intenta de nuevo.");
+        } else if (error.code === 'auth/invalid-email') {
+            mostrarToast("❌ El correo no tiene un formato válido.");
+        } else if (error.code === 'auth/too-many-requests') {
+            mostrarToast("⚠️ Demasiados intentos. Espera unos minutos.");
+        } else {
+            mostrarToast("❌ No pude iniciar sesión. Revisa correo y contraseña.");
+        }
     }
 }
 
@@ -778,11 +793,10 @@ async function manejarRegistroFirebase(e) {
     try {
         const credencial = await auth.createUserWithEmailAndPassword(email, password);
         await credencial.user.updateProfile({ displayName: nombre });
-        await credencial.user.reload();
-        usuarioActual = firebase.auth().currentUser;
-        mostrarToast("🎉 Cuenta creada. ¡Bienvenido/a " + nombre + "!");
+        await credencial.user.sendEmailVerification();
+        mostrarToast("📧 Cuenta creada. Revisa tu correo para verificar tu cuenta.");
         cerrarModales();
-        actualizarBotonSesion();
+        auth.signOut();
     } catch (error) {
         console.error("[Auth] Error registrando usuario:", error);
         if (error.code === 'auth/weak-password') {

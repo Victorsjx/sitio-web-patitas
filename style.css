@@ -918,7 +918,7 @@ body {
         height: auto;
     }
     #mapa-interactivo { height: 340px; }
-    .feed-lateral { height: 280px; }
+    .feed-lateral { height: auto; max-height: none; overflow: visible; }
     .estadisticas, .caracteristicas, .mapa-section-live, .donaciones-section {
         padding: 60px 5%;
     }

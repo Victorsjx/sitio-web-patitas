@@ -766,6 +766,7 @@ async function manejarLoginFirebase(e) {
 
 async function manejarRegistroFirebase(e) {
     e.preventDefault();
+    const nombre = e.target.querySelector('input[type="text"]').value.trim();
     const email = e.target.querySelector('input[type="email"]').value.trim();
     const password = e.target.querySelector('input[type="password"]').value;
 
@@ -774,14 +775,22 @@ async function manejarRegistroFirebase(e) {
         return;
     }
 
-   try {
+    try {
         const credencial = await auth.createUserWithEmailAndPassword(email, password);
         await credencial.user.updateProfile({ displayName: nombre });
-        mostrarToast("Cuenta creada. Bienvenido a Patitas al Rescate.");
+        usuarioActual = credencial.user;
+        mostrarToast("🎉 Cuenta creada. ¡Bienvenido/a " + nombre + "!");
         cerrarModales();
+        actualizarBotonSesion();
     } catch (error) {
         console.error("[Auth] Error registrando usuario:", error);
-        mostrarToast("No pude crear la cuenta. Usa una contrasena de al menos 6 caracteres.");
+        if (error.code === 'auth/weak-password') {
+            mostrarToast("La contraseña debe tener al menos 6 caracteres.");
+        } else if (error.code === 'auth/email-already-in-use') {
+            mostrarToast("Este correo ya tiene una cuenta. Inicia sesión.");
+        } else {
+            mostrarToast("No pude crear la cuenta. Intenta de nuevo.");
+        }
     }
 }
 

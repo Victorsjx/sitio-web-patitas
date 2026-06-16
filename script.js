@@ -778,7 +778,8 @@ async function manejarRegistroFirebase(e) {
     try {
         const credencial = await auth.createUserWithEmailAndPassword(email, password);
         await credencial.user.updateProfile({ displayName: nombre });
-        usuarioActual = credencial.user;
+        await credencial.user.reload();
+        usuarioActual = firebase.auth().currentUser;
         mostrarToast("🎉 Cuenta creada. ¡Bienvenido/a " + nombre + "!");
         cerrarModales();
         actualizarBotonSesion();
@@ -1260,7 +1261,7 @@ function manejarClickLogin() {
     }
 }
 function abrirModalPerfil() {
-    const nombre = usuarioActual.displayName || usuarioActual.email.split("@")[0];
+    const nombre = usuarioActual.displayName || usuarioActual.email.split("@")[0].replace(/[0-9]/g, '');
     const correo = usuarioActual.email;
 
     document.getElementById("perfil-nombre").innerText = "👋 " + nombre;

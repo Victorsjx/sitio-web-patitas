@@ -1066,31 +1066,6 @@ body {
    ========================================== */
 .item-feed.adopcion-card {
     position: relative;
-    overflow: hidden;
-}
-.item-feed.adopcion-card .adopcion-cta {
-    position: absolute;
-    bottom: -40px;
-    left: 0; right: 0;
-    background: var(--brand-green);
-    color: white;
-    text-align: center;
-    font-size: 12px;
-    font-weight: 700;
-    padding: 9px;
-    border-radius: 0 0 8px 8px;
-    transition: bottom 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    cursor: pointer;
-}
-.item-feed.adopcion-card:hover .adopcion-cta { bottom: 0; }
-.item-feed.adopcion-card:hover { padding-bottom: 44px; }
-@media (max-width: 768px) {
-    .item-feed.adopcion-card .adopcion-cta {
-        position: static;
-        border-radius: 8px;
-        margin-top: 8px;
-    }
-    .item-feed.adopcion-card:hover { padding-bottom: 12px; }
 }
 /* ==========================================
    ANIMACIONES — TOAST (entrada desde derecha)

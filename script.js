@@ -668,7 +668,7 @@ function abrirFichaReporte(id) {
     // Acciones
     const u = usuarioActual || firebase.auth().currentUser;
     const acciones = document.getElementById("ficha-acciones");
-    const btnAdopcion = r.estado === "adopcion" ? `<button class="btn-modal-submit" style="flex:1;" onclick="mostrarToast('🤍 Nos contactaremos contigo pronto!')">🤍 Quiero adoptarle</button>` : '';
+    const btnAdopcion = r.estado === "adopcion" ? `<button class="btn-modal-submit" style="flex:1;" onclick="mostrarToast('🤍 Nos contactaremos contigo pronto!')">🤍 Adoptar </button>` : '';
 acciones.innerHTML = `<button class="btn-hero-primary" style="flex:1;padding:10px;" onclick="enfocarMarcador(${r.coords[0]},${r.coords[1]});cerrarModales();">📍 Ver en mapa</button>${btnAdopcion}`;
     if (u && r.uid === u.uid) {
         acciones.innerHTML += `<button class="btn-cerrar-sesion" style="flex:1;" onclick="eliminarReporte('${r.id}');cerrarModales();">🗑️ Eliminar</button>`;

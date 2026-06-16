@@ -793,8 +793,10 @@ async function manejarRegistroFirebase(e) {
     try {
         const credencial = await auth.createUserWithEmailAndPassword(email, password);
         await credencial.user.updateProfile({ displayName: nombre });
-        await credencial.user.sendEmailVerification();
-        mostrarToast("📧 Cuenta creada. Revisa tu correo para verificar tu cuenta.");
+        await credencial.user.sendEmailVerification({
+            url: 'https://victorsjx.github.io/sitio-web-patitas/'
+        });
+        mostrarToast("📧 Cuenta creada. Revisa tu correo (incluso spam) para verificar tu cuenta.");
         cerrarModales();
         auth.signOut();
     } catch (error) {

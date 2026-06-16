@@ -1587,3 +1587,15 @@ h1, h2 {
 .modal-card {
     overflow: visible !important;
 }
+@media (max-width: 768px) {
+    #rescates-container {
+        max-height: none !important;
+        height: auto !important;
+        overflow-y: visible !important;
+    }
+    
+    .mapa-feed-wrapper {
+        flex-direction: column !important;
+        height: auto !important;
+    }
+}

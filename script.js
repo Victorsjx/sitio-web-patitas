@@ -391,9 +391,12 @@ function _renderizar() {
     lista.forEach(r => {
         const marker = L.marker(r.coords, { icon: obtenerIconoPorEstado(r.estado) })
             .addTo(mapa)
-            .bindPopup(`<b style="color:#2d2a22;font-size:14px;font-family:'Nunito','Segoe UI',sans-serif;">${r.titulo}</b><br>
+            .bindPopup(`
+                ${r.fotoUrl ? `<img src="${r.fotoUrl}" style="width:100%;height:120px;object-fit:cover;border-radius:8px;margin-bottom:8px;display:block;">` : ''}
+                <b style="color:#2d2a22;font-size:14px;font-family:'Nunito','Segoe UI',sans-serif;">${r.titulo}</b><br>
                 <span style="color:#8c8070;font-size:11px;">📍 ${r.comuna}</span><br>
-                <p style="margin-top:6px;font-size:12px;color:#5c5646;line-height:1.5;">${r.descripcion}</p>`);
+                <p style="margin-top:6px;font-size:12px;color:#5c5646;line-height:1.5;">${r.descripcion}</p>
+            `, {maxWidth: 220});
         marcadoresActuales.push(marker);
 
         let tagClass = "green-t", textoEstado = "🟢 Adopción";
@@ -662,7 +665,7 @@ function abrirFichaReporte(id) {
 const fichaFoto = document.getElementById("ficha-foto");
 if (fichaFoto) {
     if (r.fotoUrl) {
-        fichaFoto.innerHTML = `<img src="${r.fotoUrl}" style="width:100%;height:200px;object-fit:cover;border-radius:12px;margin-bottom:12px;">`;
+        fichaFoto.innerHTML = `<img src="${r.fotoUrl}" class="ficha-foto-hero">`;
         fichaFoto.style.display = "block";
     } else {
         fichaFoto.style.display = "none";

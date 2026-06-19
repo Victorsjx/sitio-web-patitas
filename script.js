@@ -658,8 +658,16 @@ function abrirFichaReporte(id) {
 
     const colores = { "Urgente":"red-t", "Atención":"orange-t", "adopcion":"green-t" };
     const textos  = { "Urgente":"🔴 Urgente", "Atención":"🟡 Atención", "adopcion":"🟢 Adopción" };
-
-    document.getElementById("ficha-titulo").innerText = r.titulo;
+const fichaFoto = document.getElementById("ficha-foto");
+if (fichaFoto) {
+    if (r.fotoUrl) {
+        fichaFoto.innerHTML = `<img src="${r.fotoUrl}" style="width:100%;height:200px;object-fit:cover;border-radius:12px;margin-bottom:12px;">`;
+        fichaFoto.style.display = "block";
+    } else {
+        fichaFoto.style.display = "none";
+    }
+}
+document.getElementById("ficha-titulo").innerText = r.titulo;
     document.getElementById("ficha-comuna").innerText = "📍 " + r.comuna;
     document.getElementById("ficha-descripcion").innerText = r.descripcion;
     document.getElementById("ficha-fecha").innerText = r.fecha;

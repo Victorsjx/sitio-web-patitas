@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "78196582552",
+    "project_id": "sitio-web-patitas",
+    "storage_bucket": "sitio-web-patitas.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:78196582552:android:1cd64a62d4271614fdc8ed",
+        "android_client_info": {
+          "package_name": "com.example.patitas_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtuIKXqjR8U4nS-hbjFkqBVOsaH9UZnWk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

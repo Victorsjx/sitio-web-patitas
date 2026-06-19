@@ -236,7 +236,8 @@ function normalizarReporteFirestore(doc) {
         coords: Array.isArray(data.coords) ? data.coords : [-33.4560, -70.6300],
         fecha: formatearFechaRelativa(createdAt),
         ts: createdAt,
-        uid: data.uid || null
+        uid: data.uid || null,
+        fotoUrl: data.fotoUrl || null
     };
 }
 

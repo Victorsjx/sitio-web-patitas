@@ -663,12 +663,29 @@ function abrirFichaReporte(id) {
     const colores = { "Urgente":"red-t", "Atención":"orange-t", "adopcion":"green-t" };
     const textos  = { "Urgente":"🔴 Urgente", "Atención":"🟡 Atención", "adopcion":"🟢 Adopción" };
 const fichaFoto = document.getElementById("ficha-foto");
+const colores2 = { "Urgente":"rgba(220,38,38,0.85)", "Atención":"rgba(192,122,46,0.85)", "adopcion":"rgba(61,122,79,0.85)" };
+const textos2  = { "Urgente":"🔴 Urgente", "Atención":"🟡 Atención", "adopcion":"🟢 Adopción" };
 if (fichaFoto) {
     if (r.fotoUrl) {
-        fichaFoto.innerHTML = `<img src="${r.fotoUrl}" class="ficha-foto-hero">`;
+        fichaFoto.innerHTML = `
+            <div style="position:relative;height:240px;overflow:hidden;">
+                <img src="${r.fotoUrl}" style="width:100%;height:100%;object-fit:cover;display:block;">
+                <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 30%,rgba(0,0,0,0.72) 100%);"></div>
+                <div style="position:absolute;bottom:0;left:0;right:0;padding:16px 20px;">
+                    <span style="background:${colores2[r.estado]||'rgba(61,122,79,0.85)'};color:#fff;font-size:12px;padding:4px 12px;border-radius:20px;font-weight:700;">${textos2[r.estado]||'🟢 Adopción'}</span>
+                    <h3 style="margin:8px 0 2px;font-size:20px;font-weight:800;color:#fff;font-family:'Nunito','Segoe UI',sans-serif;">${r.titulo}</h3>
+                    <p style="font-size:13px;color:rgba(255,255,255,0.85);margin:0;">📍 ${r.comuna}</p>
+                </div>
+            </div>`;
         fichaFoto.style.display = "block";
+        document.getElementById("ficha-estado-badge").style.display = "none";
+        document.getElementById("ficha-titulo").style.display = "none";
+        document.getElementById("ficha-comuna").style.display = "none";
     } else {
         fichaFoto.style.display = "none";
+        document.getElementById("ficha-estado-badge").style.display = "block";
+        document.getElementById("ficha-titulo").style.display = "block";
+        document.getElementById("ficha-comuna").style.display = "block";
     }
 }
 document.getElementById("ficha-titulo").innerText = r.titulo;
@@ -1389,6 +1406,16 @@ setInterval(() => {
       b.style.opacity = '1';
       b.style.transform = 'scale(1)';
       b.style.transition = 'all 0.3s ease';
-    }, 200);
+    }, 200);const fichaFoto = document.getElementById("ficha-foto");
+if (fichaFoto) {
+    if (r.fotoUrl) {
+        fichaFoto.innerHTML = `<img src="${r.fotoUrl}" class="ficha-foto-hero">`;
+        fichaFoto.style.display = "block";
+    } else {
+        fichaFoto.style.display = "none";
+    }
+}
+document.getElementById("ficha-titulo").innerText = r.titulo;
+    document.getElementById("ficha-comuna").innerText = "📍 " + r.comuna;
   }
 }, 2500);
